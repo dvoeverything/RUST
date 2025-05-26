@@ -117,6 +117,27 @@
         println!("{}", sum);
 
 # 5. Military time converter
+1. calculate the values of 3 fields in HH:MM:SS. HH denotes Hours, MM denotes Minutes, and SS denotes Seconds.
+
+2. To calculate Hours(HH) use the below formula
+
+Hours = total_seconds/3600;
+
+Note: total_seconds is the value entered by the user.
+
+3. Find out the remaining seconds using the mod(%) operator
+
+remaining_seconds = total_seconds % 3600
+
+4. To calculate Minutes(MM) use the below formula
+
+Minutes = remaining_seconds / 60
+
+5. Find out the remaining seconds using the mod(%) operator which also happens to be the Seconds(SS)
+
+Seconds= remaining_seconds % 60
+
+6) Print in the format : HH:MM:SS
 
 
 
