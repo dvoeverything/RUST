@@ -139,6 +139,17 @@ Seconds= remaining_seconds % 60
 
 6) Print in the format : HH:MM:SS
 
+#### taking input 
+        use std::io::{self, Write}
+        println!("Please enter the time in seconds: ");
+        io::stdout().flush().unwrap();
+        let mut buf = String::new();
+         io::stdin()
+        .read_line(&mut buf)
+        .expect("Enter valid time in seconds!");
+
+        let time_seconds: i32 = buf.trim().parse().expect("enter a valid integer");
+
 
 
 
