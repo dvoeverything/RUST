@@ -26,6 +26,8 @@
 - Arrays : [T;N], where T is the type elements and N is the number of elements
 - Slices : &[T]
 - Tuples: A tuple is a fixed-length collection of elements, where each elememt can have a different type. They are defined by a set of closing parenthesis enclosing comma-seperated list of typea (T1, T2, T3, ...)
+        let num = 32;
+        let num: i32 = 100;
 
 
 
