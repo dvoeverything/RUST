@@ -28,8 +28,22 @@
 - Tuples: A tuple is a fixed-length collection of elements, where each elememt can have a different type. They are defined by a set of closing parenthesis enclosing comma-seperated list of typea (T1, T2, T3, ...)
 
 #### defining variables
-        let num = 32;
+        let num = 32; // defaults to i32 
         let num: i32 = 100;
+        // type casting 
+        let num1: i32 = 400;
+        let num2: i32 = 30;
+        let result: i8 = (num1 + num2) as i8;  // without type casting it will throw an error
+        println!("Sum = {}", sum);
+####  mutable and immuate
+- defininhg a variable with let , automatically makes it immutable, once assigned it can not be reassigned to a new value
+- you can make it mutable by defining it with the keyword mut
+
+        let num = 10;
+        let mut sum = 0;
+        sum = num + 50;
+
+
 
 
 
