@@ -90,7 +90,7 @@
         
         let array = [1, 2 ,3];
         // {:?} or {:#?} format specifier uses
-        // Debug trait of the array which is used to print arrays in a concise and readable format
+        // Debug trait of the array which is used to print arrays in a concise and readable format , because 
         println!("{:?}", my_array);
         println!("{:#?}", my_array);
 - Repeat expession
@@ -235,8 +235,72 @@ Seconds= remaining_seconds % 60
 
                 }
         }
+# 9. References
+- can be thought of as a pointer in C, in thesense that it refers to the memory location of a value. They are different from pointers from C in that:
+1. References are immutable
+2. Cannot be null and will never dangle
+3. The borrow checker ensures that the reference will only be valid for the lifetime specified and will not outlive that lifetime
+
+        fn main(){
+                let value: i32 =  42;
+                let ref_of_value = &value; //immutable reference
+                println!("Value is {}", *ref_of_value); // Manual dereferencing
+                println!("value is {}", ref_of_value);  // Automatic dereferencing
+                println!("memory address of stored value is {:p}",ref_of_value ); 
+                println!("memory address of stored address is {:p}",&ref_of_value ); 
+        }
+### Slice 
+- slice is used to reference a portion of an array but they can also be used to reference other types of contiguous data structures, such as a string or a vector.
+- The true power of a slice lies in its ability to let you work with a portion of data efficiently, without taking ownership , copying or allocation
+
+        fn main(){
+                let array: [i32; 4] = [1,2,3,4];
+
+                let s1 = &array[1..=3]; // s1 is a slice whose type is &[i32]
+                let s2 = &array[..]; // the entire array
+                let s3 = &array[0..2]; // 0 to 2 not inclusive of 2
+                println!("{:?}", s1); //output is [2,3,4]
+
+                //start..end  -> start<=x<end
+                //start..=end -> start<=x<=end
+                //start.. -> start to the rest
+        }
+
+- Modifying from a slice 
+        fin main(){
+                let mut array = [-56, -1, 10 , 20 , 70 , 400];
+                let s1 = &mut array[1..=4]; // for us to modify the from the slice the slice itself has to be muatble and has to follow the rules
+                s1[2] = 100;
+                println!("{:?}", array); // the output is  [-56, -1, 10, 100, 70 , 400]
+
+        }
+![alt text](image.png)
+
+### Borrow , Borrower and Referent
+
+##### Mutable Borrow
+        fn main(){
+                let mut num1 = 42;
+                let ref_of_num1 = &mut num1; // adding the mut before the num1 make the reference to be mutable
+                *ref_of_num1 = 100;
+                println!("{}", num1) // the code works , the output is 100
+        }
+
+                fn main(){
+                let mut num1 = 50;
+                let r1 = &num1; // type of 'r1' is &i32
+                let r2 = &mut num1; //type of 'r2' is &mut i32
 
 
+        }
+- RUST does not allow us to create multiple mutable borrows because the is a good chance of data race condition 
+                fn main(){
+                let mut num1 = 50; //mutable referent
+                let r1 = &num1; // immutable borrow
+                let r2 = &num1; // immutable borrow
+                let r3 = &num1; // immutable borrow
+
+        }
 
 
 

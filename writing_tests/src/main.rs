@@ -45,7 +45,7 @@ mod tests {
         //3. When time_seconds is 86399, function must return 23:59:59
         #[test]
         fn last_second(){
-            assert_eq!(super::super::military_time(86399), "23:59:59");
+            assert_eq!(crate::military_time(86399), "23:59:59");
         }
         //4. When total_seconds is -ve, function must panic
         #[test]
