@@ -150,8 +150,91 @@ Seconds= remaining_seconds % 60
 
         let time_seconds: i32 = buf.trim().parse().expect("enter a valid integer");
 
+# 6. Functions
 
+        fn convert(initial_value: f64)->f64{
+                retun initial_value/3600;  //return statement can also be skipped , and removing the semicolon
+        }
+- RUST does not allow functions to have the same name , but you can do it using modules 
 
+        mod module_1{
+                pub fn convert(initial_value: f64)->f64{ //pub makes the function public because when inside the module it is private 
+                        initial_value/3600
+                }
+        }
+        mod module_2{
+                pub fn convert(initial_value: i32)->i32{
+                        initial_value/3600
+                }
+        }
+
+        fn main(){
+                module_1::convert(4.00); //put the full path when calling it.
+        }
+# 7. Why RUST is safe 
+- No null pointer dereference
+- No use after free
+- No dangling pointers 
+- No double free
+- No buffer overflows
+- Memory leaks are mostly( No language completely avoids them in all scenarios)
+- No Data races (thread accessing memory location at the same time )
+- No uninitialized memory access
+- No type confusion
+        
+        static FAIL_SAFE_MODE: AtomicBool = AtomicBool::new(false);
+        
+        fn main(){
+                panic::set_hook(Box::new(|info| {
+                        FAIL_SAFE_MODE.store(true, Ordering::SeqCst);
+                        println!("Panic occured: {}", info);
+                        println!("Entering fail-safe mode...");
+                        let buffer = [1,2,3,4,5];
+                }));
+
+                let result = panic::catch_unwind(||{
+
+                        for i in 0..10{
+                                //panics for i>=5
+                                println!("Accessing index {}: {}", i , buffer[i]);
+                        }
+                });
+
+                if FAIL_SAFE_MODE.load(Ordering::SeqCst){
+                        println!("System is now in fail-safe mode.");
+                }
+
+                match result{
+                        Ok(_)=> println!("No panic occured."),
+                        Err(_)=> println!("Panic caught! Execution Continues")
+                }
+        }
+# 8. Testing
+1. Unit testing: Tests individual functions, methods, or modules in isolation to ensure that they perfom as expected.
+2. Integration Testing: Tests the integration of multiple components or the entire module as a wholeto ensure they work together correctly
+3. Documentation Testing (Doc-Tests): Ensures that code examples in documentation are accurate and executable.
+
+- Rust does not natively support mocks. You can create mocks manually or use third party libraries.
+
+## Software development practices 
+- Test-Driven Development (TDD) - write the test cases first - write code to pass test case (iterate)
+- Test-Last Development - tests are written after the code has been developed
+
+        #[cfg(test)]
+        mod tests{
+                // helper function used by test cases 
+                fn helper_functio(){
+
+                }
+                #[test] //this attribute tells cargo to treat this function as a test case (can only be executed using the command cargo test)
+                fn test_your_test_case_1(){
+
+                }
+                #[test]
+                fn test_your_test_case_2(){
+
+                }
+        }
 
 
 
