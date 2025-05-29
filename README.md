@@ -501,6 +501,51 @@ Enter RGBA8888 data in hex format: 0xABCDEFEE
 - FInd the code in rgba888_to_rgb565
 
 
+# 12 Strings
+##### Different types of strings in Rust 
+1. String literal (&str) - UTF8 encoded characters , often created from a string literal in the source code. it has a fixed size.
+        
+        let message  = "Good Morning";// this is a string literal. The information "Good Morning " is hardcoded in the binary of the program
+
+2. String: an owned , heap allocated string type, which provides methods for mutating its contents and has a dynamic size
+
+        fn main(){
+                let mut greeting = String::from("Good morning");
+                let mut greeting = String::new(); // creating an empty string
+
+                let mut num_string = 3.148.to_string(); // this also works on all datatypes that have access to the display attribute
+        }
+#### Memory representation
+![alt text](image-1.png)
+
+- Heap memory allocated to hold the string string will be deallocated automatically
+### Copying for Strings 
+1. Shallow copying 
+2. Deep copying 
+
+##### 1. Shallow copy
+ - when a String value is assigneed to another variable, the varible is assigned a copy of the pointer, length , and capacity of the original String value, but the underlyig heap memory is not copied. This is also known as copy by reference
+
+        fn main(){
+                let s1 = String::from("hello");
+                let s2 = s1; //s1 is no invalid, for integers this is not the case , String uses the heap memory that's why 
+                println!("{}, world", s2); //s2 points to the same memory as s1
+        }
+
+![alt text](image-2.png)
+
+
+##### 2. Deep copy
+- When a String value is cloned, a new heap allocation is created with the same contents as the original String. This is also know as copy by value.
+
+* In rust Every piece of Data has a single owner at any given time. One exception is Reference Counted(RC) type 
+
+         let my_string = String::from("Hello World");
+         mystring2 = my_string.clone();
+
+#### SLice of a String 
+
+
 
 
 

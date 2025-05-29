@@ -40,7 +40,7 @@ fn read_user_input() -> String {
     .expect("Enter a valid rgba888 value");
 
     let rgba = input.trim();
-    return (rgba).to_string(); 
+    return (rgba).to_string();  // alternatively this can be return rgba.to_owned(); this is because rgba is a string literal (&str) and not a String
     
 }
 
