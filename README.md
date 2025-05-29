@@ -79,6 +79,7 @@
                 }
         }
 #### Arrays
+
         // they type and size of an array can inferred by the compiler , but generally this is how it is defined
         let my_array: [f64; 3] = [2.5, 4.0, 3.8];
         let my_array1 = [2.5, 4.0, 4.2]; // this also works , by the compiler 
@@ -93,11 +94,15 @@
         // Debug trait of the array which is used to print arrays in a concise and readable format , because 
         println!("{:?}", my_array);
         println!("{:#?}", my_array);
+
 - Repeat expession
+
         let array: [i32 ; 10] = [0;10]; // creates an array and initializes with 10 zeros of type i32
         let buffer = [0_u8; 1024]; // creates a 1kb buffer
         println!("{:?}", buffer);
+
 - Array indexing 
+
         let array1 = [5,4,3,2,1];
         let element = array1[3];
         println!("{}", element)
@@ -108,6 +113,7 @@
         println!("{:?}", array2); // [4,4,4,10 , 4]
 
 - Iterating over an array
+
         let array = [10, -67, 88, -5, -2, 99, 132, 42]; //[i32, 8]
 
         let mut sum = 0;
@@ -115,6 +121,9 @@
                 sum+=i;
         }
         println!("{}", sum);
+
+
+
 
 # 5. Military time converter
 1. calculate the values of 3 fields in HH:MM:SS. HH denotes Hours, MM denotes Minutes, and SS denotes Seconds.
@@ -140,6 +149,7 @@ Seconds= remaining_seconds % 60
 6) Print in the format : HH:MM:SS
 
 #### taking input 
+
         use std::io::{self, Write};
         println!("Please enter the time in seconds: ");
         io::stdout().flush().unwrap();
@@ -267,6 +277,7 @@ Seconds= remaining_seconds % 60
         }
 
 - Modifying from a slice 
+
         fin main(){
                 let mut array = [-56, -1, 10 , 20 , 70 , 400];
                 let s1 = &mut array[1..=4]; // for us to modify the from the slice the slice itself has to be muatble and has to follow the rules
@@ -275,6 +286,19 @@ Seconds= remaining_seconds % 60
 
         }
 ![alt text](image.png)
+
+#### looping through an array 
+        fn main(){
+                let array = [-56, -1, 10 , 20 , 70 , 400];
+                let slice = [0..=3];
+                let mut sum = 0;
+                //type of slice is &[i32]
+                //i is a loop variable which is a reference not the actual value, and it is of type &i32, although it works , the compiler figures that out
+                for i in slice{       // this also works for &i in slice{}, and in that case the type i will i32 instead of &i32
+                        sum = sum+*i; // this also works sum = sum + i
+                }
+                println!("sum: {}", sum);
+        }
 
 ### Borrow , Borrower and Referent
 
@@ -301,6 +325,37 @@ Seconds= remaining_seconds % 60
                 let r3 = &num1; // immutable borrow
 
         }
+
+#### Array and Slice methods
+- Reverse
+        let mut array = [2,3,4,5,6];
+        array.reverse();
+
+- Sort
+        let mut array = [3,5,1,3,6,7];
+        array.sort(); // will sort in ascending order --- checkout docs for more sort functions
+
+- Find the biggest
+        //sort then return the last ;last index
+        let mut array = [3,5,1,3,6,7];
+        array.sort(); // will sort in ascending order --- checkout docs for more sort functions
+        let length = array.len();
+        println!("Biggest number: {}", array[length - 1])
+
+
+- Concat
+        let array1 = [1,2,3];
+        let array2 = [4,5,6];
+        let array3 = [array1, array2].concat();
+        println!("{:?}+ {:?} = {:?}", array1 , array2 , array3);
+
+- Split_at methods
+         let mut array = [3,5,1,3,6,7];
+         let (l,r) = array.split_at(2);
+         println!("{:?}",l); // prints the left hand side of the split array 
+         println!("{:?}",r);
+
+
 
 
 
