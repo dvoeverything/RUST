@@ -429,16 +429,15 @@ Seconds= remaining_seconds % 60
 
 #### Bitwise Operations 
 <table>
-| Hex | Binary | Hex | Binary |
-| --- | ------ | --- | ------ |
-| 0   | 0000   | 8   | 1000   |
-| 1   | 0001   | 9   | 1001   |
-| 2   | 0010   | A   | 1010   |
-| 3   | 0011   | B   | 1011   |
-| 4   | 0100   | C   | 1100   |
-| 5   | 0101   | D   | 1101   |
-| 6   | 0110   | E   | 1110   |
-| 7   | 0111   | F   | 1111   |
+<row><col> Hex </col><col> Binary </col><col> Hex</col><col> Binary </col></row>
+<row><col> 0   </col><col>0000 </col><col>8  </col><col>1000  </col></row>
+<row><col> 1   </col><col>0001  </col><col> 9 </col><col> 1001  </col></row>
+<row><col> 2  </col><col> 0010   </col><col> A   </col><col> 1010  </col></row>
+<row><col> 3   </col><col> 0011   </col><col> B   </col><col> 1011  </col></row>
+<row><col>4   </col><col> 0100   </col><col> C   </col><col>1100   </col></row>
+<row><col> 5   </col><col> 0101   </col><col> D   </col><col> 1101   </col></row>
+<row><col> 6  </col><col> 0110   </col><col> E   </col><col>1110   </col></row>
+<row><col> 7   </col><col> 0111   </col><col> F   </col><col> 1111   </col></row>
 </table>
 
         //Extract the 4th to 12th bit positions of the number
