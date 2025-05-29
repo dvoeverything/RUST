@@ -443,11 +443,62 @@ Seconds= remaining_seconds % 60
         //Extract the 4th to 12th bit positions of the number
         fn main(){
                 let num = 0x00ABCDEF;
-                let mask  = 0x1FF << 4 ; // to mask we use 1 1111 1111, which is converted to hexadecimals to 0x1FF , but we right shift it by 4 positions to affect the 5th bit
+                let mask  = 0x1FF << 4 ; // to mask we use 1 1111 1111, which is converted to hexadecimals to 0x1FF , but we left shift it by 4 positions
 
-                let res = ((num & mask)>>4) & 0x1FF;
+                let res = ((num & mask)>>4) & 0x1FF; // & 0x1FF is the optional final clean up to ensure we have 9 bits , its a common defensive habit
                 println!("{:#X}", res )
         }
+        /*
+        num  = 0x00ABCDEF           0000 0000 1010 1011 1100 1101 1110 1111
+        mask = 0x00001FF0           0000 0000 0001 1111 1111 0000 0000 0000
+        -------------------------------------------------------------------
+        num & mask = 0x00000DE0     0000 0000 0000 0000 1101 1110 0000 0000
+        */
+
+# 11. Convert 32-bit RGBA8888 color format to 16-bit RGB565 color Format Exercise
+Write a program which accepts 32-bit RGBA8888 color format in hex  from the user and converts that into 16-bit RGB565 color format
+
+ Hints
+ ============================
+
+1) Extract the red, green, and blue components from the 32-bit RGBA input.
+
+2) Scale down these color components to fit the RGB565 format, which allocates 5 bits for red and blue, and 6 bits for green.
+
+For example if 0xABCDEFEE is in RGBA8888 format, in binary it would look like below
+
+    10101011(R)   11001101(G)   11101111(B)   11101110(A)
+
+    to convert this into RGB565,
+
+i) Neglect A
+
+ii) in R consider only most significant 5 bits
+
+iii) in G consider only most significant 6 bits
+
+iv) in B consider only most significant 5 bits
+
+
+
+3) Removing Hex prefix from user input:
+
+Use the 'trim_start_matches' method on the string to remove the "0x" or "0X" prefix
+
+4) To convert String to Integer U32 value , explore
+
+u32::from_str_radix() with radix = 16
+
+
+
+ - Expected Output
+=============================
+
+Enter RGBA8888 data in hex format: 0xABCDEFEE
+
+0xABCDEFEE RGB565 equivalent is 0xAE7D
+
+- FInd the code in rgba888_to_rgb565
 
 
 
