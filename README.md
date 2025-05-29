@@ -544,6 +544,7 @@ Enter RGBA8888 data in hex format: 0xABCDEFEE
          mystring2 = my_string.clone();
 
 #### SLice of a String 
+- similar to arrays
 
 
 
