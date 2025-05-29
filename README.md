@@ -360,6 +360,97 @@ Seconds= remaining_seconds % 60
          println!("{:?}",l); // prints the left hand side of the split array 
          println!("{:?}",r);
 
+# 10. Decision Making
+
+- if... else
+- if..else if ..else
+- if..let
+- match
+
+#### If  Expression 
+        let age = 15;
+        let message = if age< 18{
+                println!("This is the if statement"); //you have to terminate this with ;
+                "you can not vote" // no need for ; because it is an expression
+        } else {
+                println!("This is the if statement"); //you have to terminate this with ;
+                "you can vote"
+        }
+#### Match statement
+
+        fn main(){
+                let x: u8 = 1; // the match statement has to be exhaustive for instance we said x is of type u8 , which means you have to handle values upto 127
+
+                match x {
+                        1 => println!("one"),
+                        2 => println!("two"),
+                        _ =>println!("Something else"), // _ means other cases
+                }
+        }
+        // the output for this code is "one"
+
+        //another example
+        fn main(){
+                let array1 = [1,-2,3,4];
+
+                let invalid_array = match array1{
+                       [n, _ , _ , _ ]|  [_, n , _ , _ ]|
+                       [_, _ , n , _ ]|  [_, _ , _ , n ] if n < 0 =>{
+                        true
+                       }
+                       _=> false ,
+                };
+                if invalid_array{
+                        println!("Array is invalid");
+                } else {
+                        println!("Array is valid")
+                }
+        }
+
+#### Matches statements 
+
+        let invalid_array = matches!(array1 , [n, _ , _ , _ ]|  [_, n , _ , _ ]|
+                       [_, _ , n , _ ]|  [_, _ , _ , n ] if n < 0 ); // this still works the same way as the above statement 
+
+#### if..let, else if let 
+- pattern matching like the match statement 
+
+        fn main(){
+                let point = (4,2);
+
+                if let (0,0) = point{
+                        println!("y is within the range 1..4");
+                } else if let (_,y @ 1..=4) = point{
+                        println!("y = {} is within the range 1..4", y);
+                } else {
+                        println!( "y is out of range");
+                }
+        }
+
+#### Bitwise Operations 
+<table>
+| Hex | Binary | Hex | Binary |
+| --- | ------ | --- | ------ |
+| 0   | 0000   | 8   | 1000   |
+| 1   | 0001   | 9   | 1001   |
+| 2   | 0010   | A   | 1010   |
+| 3   | 0011   | B   | 1011   |
+| 4   | 0100   | C   | 1100   |
+| 5   | 0101   | D   | 1101   |
+| 6   | 0110   | E   | 1110   |
+| 7   | 0111   | F   | 1111   |
+</table>
+
+        //Extract the 4th to 12th bit positions of the number
+        fn main(){
+                let num = 0x00ABCDEF;
+                let mask  = 0x1FF << 4 ; // to mask we use 1 1111 1111, which is converted to hexadecimals to 0x1FF , but we right shift it by 4 positions to affect the 5th bit
+
+                let res = ((num & mask)>>4) & 0x1FF;
+                println!("{:#X}", res );
+        }
+
+
 
 
 
