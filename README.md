@@ -328,14 +328,17 @@ Seconds= remaining_seconds % 60
 
 #### Array and Slice methods
 - Reverse
+
         let mut array = [2,3,4,5,6];
         array.reverse();
 
 - Sort
+
         let mut array = [3,5,1,3,6,7];
         array.sort(); // will sort in ascending order --- checkout docs for more sort functions
 
 - Find the biggest
+
         //sort then return the last ;last index
         let mut array = [3,5,1,3,6,7];
         array.sort(); // will sort in ascending order --- checkout docs for more sort functions
@@ -344,12 +347,14 @@ Seconds= remaining_seconds % 60
 
 
 - Concat
+
         let array1 = [1,2,3];
         let array2 = [4,5,6];
         let array3 = [array1, array2].concat();
         println!("{:?}+ {:?} = {:?}", array1 , array2 , array3);
 
 - Split_at methods
+
          let mut array = [3,5,1,3,6,7];
          let (l,r) = array.split_at(2);
          println!("{:?}",l); // prints the left hand side of the split array 
