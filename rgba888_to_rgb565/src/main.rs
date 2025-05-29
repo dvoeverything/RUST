@@ -35,21 +35,19 @@ use std::io::Write;
 
 fn read_user_input() -> String {
     let mut input = String::new();
-    io::stdin
+    io::stdin()
     .read_line(&mut input)
     .expect("Enter a valid rgba888 value");
 
-    let rgba: str = input.trim().parse().expect("Enter valid Hex value!");
-    return rgba; 
-
-    
+    let rgba = input.trim();
+    return (rgba).to_string(); 
     
 }
 
 fn parse_hex_to_u32(hex_str: &str) -> u32 {
     //TODO
-    let hex = u32::from_str_radix(hex_str.strip_prefix("0x" || "OX").unwrap_or(hex_str), 16)?;
-    return hex;
+    let no_prefix = hex_str.trim_start_matches("0x").trim_start_matches("0X");
+    u32::from_str_radix(no_prefix, 16).expect("Invalid argument")
     
 }
 
@@ -58,8 +56,17 @@ fn rgba8888_to_rgb565(rgba: u32) -> u16 {
 
 
     // TODO: Convert to RGB565
+    let r = ((rgba >> 24) & 0xFF) as u16; 
+    let g = ((rgba >> 16) & 0xFF) as u16; 
+    let b = ((rgba >>  8) & 0xFF) as u16; 
 
+    let r5 = r >> 3;             // keeping Most significant 5
+    let g6 = g >> 2;             // keeping Most Significant 6
+    let b5 = b >> 3;              //keeping most significant 5
 
+    (r5 << 11) | (g6 << 5) | b5   // pack into 16 bits
+
+// |1|1|1|1|1|0|0|0|0|0|0|0|0|0|0|0|
 }
 
 fn main() {
