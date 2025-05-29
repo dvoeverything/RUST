@@ -1,0 +1,6 @@
+[package]
+name = "RGBA888_to_RGB565"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
