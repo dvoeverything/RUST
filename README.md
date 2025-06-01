@@ -544,7 +544,62 @@ Enter RGBA8888 data in hex format: 0xABCDEFEE
          mystring2 = my_string.clone();
 
 #### SLice of a String 
-- similar to arrays
+- similar to arrays 
+- you can not modify the original string from a slice by indexing, it is of type &[T]
+
+#### Converting a String into a slice or string literal
+
+        fn print_string(arg: &str){
+                println!("{}", arg);
+        }
+
+        fn main(){
+                let s: String = String::from("Hello");
+
+                let slice = &s; //type of 'slice is &String  --> &str'
+
+                print_string(slice);
+                let slice2 = s.as_str() //type of slice2 is &str
+
+                let slice3 = s.as_str() //type of slice3 is &mut str
+        }
+#### Converting a string literal or slice  into a String
+
+        fn main(){
+                let s = "Good morning ";
+                let string1 = s.to_string(); // type of string1 is String 
+                let string = String ::from(s); // type of string is String 
+
+        }
+
+#### String to byte array
+        fn main(){
+                let message: String  = String::from("hello+∞+§);
+                let byte_slice: &[u8] = message.as_bytes();
+                for byte: &u8 in byte_slice{
+                        print!("{:#X}\t", byte); //the output is out the above UTF8 is stored in the memory
+                }
+        }
+
+#### Iterating on a string
+
+        let computer_in_hindi = "ºª•∑¶§™£¢∞¶§•ªª¶§∞§¢™≥≤`¡";
+
+        for ch in computer_in_hindi.chars(){
+                print!("{}", ch);
+                print!(" ");
+        }
+
+# Password Validity project 
+        Write a program to check validity of a password input by users Following are the criteria for checking the password:
+        1. atleast 1 letter between a-z
+        2. atleast 1 number btween 0-9
+        3. atleast 1 letter between A-Z
+        4. atleast 1 character from [$#*]
+        5. minimum length of password : 6
+        6. Maximum length of password: 12
+
+
 
 
 
