@@ -41,10 +41,10 @@ fn get_user_input()-> String{
 }
 fn password_match(p1: &str, p2: &str)->bool{
         if p1 == p2 {
-            println!("password strong");
+            println!("password are the same");
             return true;
        }else{
-        println!("password weak");
+        println!("password not the same");
         return false;
        }
 

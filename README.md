@@ -599,6 +599,179 @@ Enter RGBA8888 data in hex format: 0xABCDEFEE
         5. minimum length of password : 6
         6. Maximum length of password: 12
 
+# 13. Ownership , Move and Copy Semantics
+         // Move
+
+         fn main(){
+
+                let array1 = [5, 6, 7,8]; //[i32; 4] , these will be in the stack memory
+                let array2: [String;3] = [
+                        String::from("foo"),
+                        String::from("bar"),
+                        String::from("baz"),
+                ];   // these will be in the heap memeory, but their refernces will be in the stack 
+
+                //doing this will work because it is of type i32 , which has a copy trait
+
+                let item = array1[2]; // this is because is it of copy trait , 
+                let str_item1 = array2[1]; however this does not work for the String in rust because it make the reference to be invalid 
+
+                // something that works is indexing as a slice 
+                let str_item : &str = &array2[1];
+                println!("{}", str_item);
+
+                //looping through the String 
+                for str in &array2{
+                        println!("{}",str);
+                }
+                println!("{:?}", array2);
+
+         }
+
+
+#### &mut T and &T
+- &mut T is Move while &T is Copy
+
+
+#### Call by value and Call by reference 
+
+        fn main(){
+                let arr = [10, 20, 30, 40 , 50];
+
+                // Call by value
+                let max_value = find_greatest_value_by_value(arr);
+                println!("Maximum value by value: {}", max_value);
+
+                // Call by reference
+                let max_value = find_greatest_value_by_reference(&arr);
+                println!("Maximum value by reference : {}", max_value)
+        }
+        fn find_greatest_value_by_value(arr: [i32; 5])-> i32 {     // Copy
+                //ToDo
+        }
+        fn find_greatest_value_by_reference(arr: &[i32])-> i32{   // Move
+                //ToDo
+        }
+
+# 14. Loops
+
+#### Loop : 
+- used to create an infinite loop that continues indefinitely until a break statement is encountered within the loop
+
+        fn main(){
+                let mut i = 0;
+
+                loop{
+                        if i == 3{
+                                break;
+                        }
+                        println!("i = {}", i);
+                        i += 1;
+                }
+                println!("loop ends");
+        }
+        // Break with return value 
+        fn main(){
+                let mut i = 0;
+
+                let result = loop{
+                        if i == 3{
+                           break i*2;
+                        }
+                        println!("i = {}", i);
+                        i += 1;
+                }
+                println!("result = {}", result);
+        }
+        // Loops can also have labels 
+        fn main(){
+                'outer: loop{
+                        println!("Outer loop");
+
+                        'inner: loop{
+                                println!("Inner loop");
+
+                                loop{
+                                        println!("inner loop2");
+                                        break 'outer
+                                }
+                        }
+                }
+        }
+
+
+#### while:
+- used to loop over a block of code as a specified condition remains true, condition based iterating
+
+#### while let 
+- This is a variant of the while loop that allows you to match againsta pattern and extract variable from it , continuing to loop as long as the pattern matches
+
+#### for in: 
+- Used to iterate over a collection of items such as an array , vector , or range. It is similar to the for loop in other programming languages
+
+
+#### iterating over an immutable reference
+        fn main(){
+                let words = 
+                [
+                        "hello".to_string(),
+                        "world".to_string(),
+                        "how".to_string(),
+                        "are".to_string(),
+                        "you".to_string(),
+                ];
+                //iterate by value
+                for str in words{
+                        println!("{}", str);
+                }
+                // this takes the ownership of the array and you can't print it after the for loop
+
+
+                //iterate by reference , this does not take ownership rather it borrows
+                for str in &words{
+                        println!("{}", str);
+                }
+        }
+#### iterating over mutable reference
+fn main(){
+                let mut words = 
+                [
+                        "hello".to_string(),
+                        "world".to_string(),
+                        "how".to_string(),
+                        "are".to_string(),
+                        "you".to_string(),
+                ];
+                //iterate by mutable reference
+                // type of 'str' is &mut String
+                for str in &mut words{
+                        if str == "hello"{
+                                str .push_str("good morning");
+                        }
+                }
+
+                println!("{:?}", words);
+
+
+}
+
+#### Iterating over a string slice
+when using the for loop think of a type that implements an iterator
+        let msg = "Hello world";
+        let target_char = "l";
+
+        let mut count = 0;
+        
+        // for c in msg: would not work because msg is not of iterator type 
+        for c in msg.chars(){
+                if c == target_char{
+                        count+=1;
+                }
+        }
+
+
+
+
 
 
 
