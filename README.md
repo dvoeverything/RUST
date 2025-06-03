@@ -1,4 +1,5 @@
 # RUST
+Buy the course at : https://www.udemy.com/course/master-the-rust-programming-language/?kw=rust+pro&src=sac&couponCode=ST21MT30625G1
 # 1. hello_world_001
 # 2. print_002
 # 3. EMI_calculator
@@ -778,8 +779,118 @@ when using the for loop think of a type that implements an iterator
 
 - the solution is in the palindrome project directory
 
+# 16. Tuples 
+
+- A tuple is a data structure that allows you to group together multiple values of different types into a single, ordered collection.
+
+        let my_tuple = (1 , "hello", true);
+        let my_tuple: (i32, &str , bool) = (1, "hello", true);
+        prntln!("{:?}", my_tuple); // does not implement the display trait therefore uses the debug trait
+
+- Tuples in Rust do not have a named parameters. instead, the elements of a tuple are accessed by their position using indexing starting at 0.
+
+        let number = my_tuple.0;  //indexing 
+        let msg = my_tuple.1; 
+        let boolean = my_tuple.2;
+
+        // tuple destructing syntax
+        let (number , message, is_valid) = my_tuple;
+
+##### Mutable tuple 
+
+ fn main(){
+        let mut number = (1, 2, 3);
+        increment_numbers(& mut number);
+        println!("{:?}", number);
+ }
+
+ fn increment_numbers(num_list: &mut (i32, i32, i32)){
+        num_list.0 += 1;
+        num_list.1 += 1;
+        num_list.2 +=1;
+        // Rust provides automatic dereferencing for method calls and field access when you have a reference to an object such as a tuple,, or an object of a struct or enum
+
+ }
+ 
+ #### Tuples can be nested 
+
+        let grid = ((1,2,3), (4,5,6), (7,8,9));
+        println!("Middle element: {}", grid.1.1);
+
+#### Pattern matching in tuples : Tuples comparison 
+
+- Tuples can also be compared lexicographically using operators like ==, != , <, >, <=, and >= as long as all the types in the tuple implemenmt the PartialOrd and PartialEq trait 
+
+- The PartialOrd trait is used to define the ordering relationship between two values , while the PartialEq trait is used to define the equality relationship between two values.
+
+- Example : Process the middle element only when the first element is greater than 0 , the last element is less than 10
+
+        fn main(){
+                let rcvd_data = (5, "hello",  8);
+
+                match rcvd_data {
+                        (a,s,c) if a >0 && c < 10 => {
+                                println!("Valid data: s = {}", s);
+                        }
+
+                        _ => println!("Invalid data"),  // match has to be exhaustive
+                }
+        }
+
+#### pattern matching with tuple using the rest operator (..) to ignore some elements 
+
+        fn main(){
+                let tup = (1, "hello", 2.5. true. 'a');
+
+                match tup {
+                        (_, _, c , ..) if c > 2.0 => println!("The third element is greater than 2.0"),
+                        _ => println!("The third element is less than or equal to 2.0"),
+
+                }
+        }
+
+- The .. syntax is called the "rest" operator in Rust. It can be used in destructing pattern to match any remaining elements in a tuple , array , or struct
 
 
+#### pattern matching with tuple  using variable binding and rest operator
+
+        fn main(){
+                let tup = (10, "hello", 2.5 , true , 'a');
+
+                match tup{
+                        (a@10, b @ "hello", ..)=> println!("The first and second element: {} and {}", a , b),
+                        _ =>println!("The tuple does not match the pattern"),
+                }
+        }
+
+#### Move while matching 
+Remember this 
+- i32 -- copy 
+- String -- move 
+
+- ref is the possible fix for this 
+
+#### ref keyword
+
+        fn main(){
+                let the_date = (
+                        "Monday".to_string(),
+                        "25".to_string(),
+                        "June".to_string(),
+                        "2023".to_string(),
+                );
+
+                match the_date{  // alternatively you can use  &the_date , instead of ref to borrow the whole tuple
+                        (ref day, ..) if day .as_str() == "Sunday" =>{
+                                println!("Its Sunday");
+
+                        }
+                        _ => println!("Some other date"),
+                }
+                println!("{:?}", the_date); // this will print out the the_date without an error , because of the ref word which allows the match to borrow rather than move which happen if the ref is not used
+        }
+         
+        
 
 
 

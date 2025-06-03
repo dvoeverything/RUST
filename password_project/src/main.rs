@@ -68,7 +68,7 @@ fn password_properties(password: &str)-> bool{
             '_'            => {},             
             _ if ch.is_ascii() && !ch.is_alphanumeric() =>
                                has_special  = true,
-            _ => {}                           
+            _ => {}                           // has to be exhaustive
         }
       if has_digit && has_uppercase && has_lowercase && has_special {
             return true;
