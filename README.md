@@ -711,6 +711,7 @@ Enter RGBA8888 data in hex format: 0xABCDEFEE
 
 
 #### iterating over an immutable reference
+
         fn main(){
                 let words = 
                 [
@@ -733,7 +734,8 @@ Enter RGBA8888 data in hex format: 0xABCDEFEE
                 }
         }
 #### iterating over mutable reference
-fn main(){
+
+        fn main(){
                 let mut words = 
                 [
                         "hello".to_string(),
@@ -756,7 +758,9 @@ fn main(){
 }
 
 #### Iterating over a string slice
+
 when using the for loop think of a type that implements an iterator
+
         let msg = "Hello world";
         let target_char = "l";
 
@@ -769,7 +773,10 @@ when using the for loop think of a type that implements an iterator
                 }
         }
 
+# 15. Palindrome Project 
+- To determine if the given char array is a palindrome, loop over the array up to half its length. During each iteration of the loop, compare the character at the current index from the start of the array with the character at the corresponding index from the end of the array. If all matching characters are equal, then the array is a palindrome.
 
+- the solution is in the palindrome project directory
 
 
 

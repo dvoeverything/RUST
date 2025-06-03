@@ -19,7 +19,7 @@ fn is_palindrome<T: PartialEq>(array: &[T]) -> bool {
     let mut j = array.len() - 1;
 
     if array.len() == 0 {
-        return true;
+        return true;   // alway remembver base condition
     }
 
     while i < j {
