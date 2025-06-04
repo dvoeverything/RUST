@@ -85,3 +85,4 @@ fn success_output(){
 fn error_output(){
     println!("Password update failed!");
 }
+

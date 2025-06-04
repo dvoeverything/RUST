@@ -889,8 +889,68 @@ Remember this
                 }
                 println!("{:?}", the_date); // this will print out the the_date without an error , because of the ref word which allows the match to borrow rather than move which happen if the ref is not used
         }
-         
         
+
+# 17. Fruits Sort Project 
+You are required to write a program to sort the (fruit-name, price, quanity) tuples by
+
+ascending order where fruit-name is string, price and quantity are numbers.
+
+1: Sort based on fruit-name;
+
+2: Then sort based on price;
+
+3: Then sort by quantiy.
+
+The priority is that fruit-name > price > quantity.
+
+If the following tuples are given as input to the program:
+
+Mango-us,50,80
+
+Mango-uk,50,80
+
+Orange,19,80
+
+Blackberry,20,90
+
+Blueberry,17,91
+
+Blueberry,17,93
+
+Blueberry,21,85
+
+
+
+Expected output:
+
+("Blackberry", 20, 90)
+
+("Blueberry", 17, 91)
+
+("Blueberry", 17, 93)
+
+("Blueberry", 21, 85)
+
+("Mango-uk", 50, 80)
+
+("Mango-us", 50, 80)
+
+("Orange", 19, 80)
+
+
+
+Hint :
+
+1) Remember you can compare the tuple lexicographically.
+
+2) Use bubble sort. logic is given in the code.
+
+You need to compare the ith tuple with the (i+1)th tuple and swap them if necessary
+
+3) Use swap() method for swapping array elements (https://doc.rust-lang.org/std/primitive.slice.html#method.swap)
+
+
 
 
 
