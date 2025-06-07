@@ -837,6 +837,27 @@ when using the for loop think of a type that implements an iterator
                 }
         }
 
+
+        fn execute_command_refactored(mode: &str, status: &str) {
+
+        match (mode, status) {
+
+                ("admin","active") => {println!("Admin privileges granted. Executing active command.")},
+                ("normal","pending") => println!("Normal operation. Execute pending or active commands."),
+                ("maintenance","complete") => println!("Maintenance complete. System can resume normal operation."),
+                _ => println!("No action needed or invalid mode/status."),
+                
+        }
+        }
+        
+        
+        fn main() {
+        execute_command_refactored("admin", "active");
+        execute_command_refactored("normal", "pending");
+        execute_command_refactored("maintenance", "complete");
+        execute_command_refactored("admin", "pending");  
+        }
+
 #### pattern matching with tuple using the rest operator (..) to ignore some elements 
 
         fn main(){
@@ -952,16 +973,296 @@ You need to compare the ith tuple with the (i+1)th tuple and swap them if necess
 
 
 
+# 18. Structs
+- Structs are user-defined data types that enable you to organize and encapsulate related pieces of data with different data types into a single unit, using named member fields for convenient access and manipulation.
+- By defining a struct, the programmer can create a custom data type that is tailored to the needs of their.
+
+        struct Person {
+                name: String,
+                age: u32,
+                address: String, 
+        }
+
+#### Different types of structs
+- There are three main types of structs in Rust :
+1. Tuple struct : Struct that has unnamed fields 
+2. Named struct: Struct that has named fields
+3. Unit Struct: Struct that has no fields 
+
+1. Named Struct 
+
+        struct Person{
+                name: String,
+                age: u32,
+                address: String,
+        }
+
+        fn main(){
+                let person = Person{
+                        name : String::from("Alice"),
+                        age: 25,
+                        address: String::from("123 Main St"),
+                };
+                // use the dot (.) operator to print the values of each member element 
+                println!("Name: {}", person.name);
+                println!("Age: {}", person.age);
+                println!("Address: {}", person.address);
+        }
+
+- Mutable struct 
+        #[derive(debug)]  //inorder to print the struct, it does not implement the debug or display trait therefore this is the way
+        struct Person{
+                name: String,
+                age: u32,
+                address: String,
+        }
+
+        fn main(){
+                // create a new mutable Person struct
+                let mut person = Person{
+                        name : String::from("Alice"),
+                        age: 25,
+                        address: String::from("123 Main St"),
+                };
+
+                person.name = String::from("Bob"); // this works because of the mut keyword
+
+                //print the updated struct
+                println!("{:?}", person);
+
+                //move 'name' field of struct is uninitialized 
+                // let _name = person.name;
+        }
+
+#### Structs copy or Move ?
+- Structs are by default Move irregardless of their member contents , but you can make them to be copy if their member elements are copy eg i32 using the derive trait
 
 
+        #[derive(Copy , Clone, debug)] 
+        struct Person{
+                x1: i32,
+                x2: i32,
+                x3: i32,
+        }
+
+#### Default trait 
+- as we know we have to initialize a struct , you can actually give the struct default values using the default trait
+
+        #[derive(Debug, Default)]
+        struct Person{
+                name: String,
+                age: u8,
+                is_male: bool,
+                height: f32,
+                initial: char,
+                address: String,
+        }
+
+        fn main(){
+                // create a new mutable Person struct
+                let user= Person::default();
+                println!("{:?}", user);
+
+        }
+
+#### Updating a struct using another struct 
+
+- they have to be of the same type
+
+        #[derive(Debug)]
+        struct Person{
+                name: String,
+                age: u8,
+                is_male: bool,
+                height: f32,
+        }
+
+        fn main(){
+                // create a new mutable Person struct
+                let user1= Person{
+                        name: String::from("Ronie"),
+                        age: 23,
+                        is_male: true,
+                        height: 5.4
+
+                };
+
+                let user2= Person{
+                        name: String::from("Leslie"),
+                        ..user1
+
+                };
+
+                let user3= Person{
+                        name: String::from("Sam"),
+                        ..user1
+
+                };
+                println!("user3: {:?}", user3);
+
+        }
 
 
+#### Tuple Struct
 
+- Tuple structs are similar to tuples in that they don't have named fields . Instead, the fields are accessed by their index within the tuple. However unlike the normal struct the tuple structs posses a name , which can be advantageus in providing additional context and clarity to the code
 
+        struct Point (i32, f64, u8;)
 
-
-
-
-
-
+        fn main(){
+                let point = Point(10, 3.5, 1);
+                println!("x: {}, y: {}, z: {}", point.0, point.1, point.2);
+        }
          
+#### Methods and associated  functions of a struct
+
+##### Methods 
+- Methods are associated with a specific instance of the struct or enum
+- Methods are defined within the impl block for the struct or , and their first parameter is always a reference to the instance of the struct or enum
+- struct methods are accessed using instance of the struct followed by the dot(.) operator. For example, if we have an instance of the Person struct named person with a method named introduce, we can access it as person.introduce().
+
+##### Associated functions
+- Associated functions are not tied to any particular instance and are called on the type itself.
+- Associated functions are defined within the impl block as well,  but their first parameter is not a reference to the type.
+- Associated functions are accessed using the struct's name followed by the double colon (::) operator
+- For example, if we have a struct named Person with an associated function new, we can access it as Person::new().
+
+
+        struct MyStruct {
+
+        }
+        // f1() and f2() are methods / associated functions of 'MyStruct'
+        // Put them inside impl  <Struct-Name> block
+
+        impl MyStruct {
+                fn f1(...){
+                        .....
+                }
+                fn f2(...){
+                        ......
+                }
+        }
+
+        fn main(){
+                // create an instance of 'MyStruct'
+                let struct_inst = MyStruct{
+                        ......
+                };
+                // METHOD CALL
+                struct_inst.f1();
+        }
+
+- Another Example
+* self keyword in a struct method signifies the instance of the struct on which the method is being called. It is analogous on which the method is being called. It is to 'this ' in many other OOP languages
+
+- Associated 
+        //Associated function 
+                struct Point {
+                x: f32,
+                y:f32,
+        }
+
+        fn distance_from_origin(point: &Point)-> f32 {
+                (point.x.powi(2) + point.y.powi(2)).sqrt()
+        }
+
+        fn main(){
+                let p = Point{x:3.0, y: 4.0};
+                println!("distance: {}", p.distance_from_origin(&p));
+        }
+
+- Methods 
+        //Methods borrowing self immutably and mutably
+        #[derive(Debug)] // to enable printing using the debug trait since it is not not implemented for the structs 
+        struct Point {
+                x: f32,
+                y:f32,
+        }
+
+        impl Point {
+                //Method borrowing self immutably
+                fn distance_from_origin(self: &Point)-> f32 {    // this also worksfn distance_from_origin(&self)-> f32
+                        self.x.powi(2) + self.y.powi(2).sqrt()
+                }
+                //Method borrowing self mutably
+                fn translate(&mut self , dx: f32, dy: f32){
+                        self.x += dx;
+                        self.y += dy;
+
+                }
+                // Method that takes ownership of the self
+                fn into_tuple()->(f32, f32){
+                        (self.x, self.y)
+                }
+                // Using self as the first parameter of a method means the method takes ownership of the instance and consumes it, transforming it into something else. This is useful when you want to prevent the caller from using the original instance after the transformation.
+        }
+
+        fn main(){
+                let mut p = Point{x:3.0, y: 4.0};
+                println!("distance: {}", p.distance_from_origin());
+                println!("modified Points: {:?}", p);
+        }
+
+- Associated functions
+        #[derive(Debug)] // to enable printing using the debug trait since it is not not implemented for the structs 
+        struct Point {
+                x: f32,
+                y:f32,
+        }
+        impl Point {
+                //Method borrowing self immutably
+                fn distance_from_origin(self: &Point)-> f32 {    // this also worksfn distance_from_origin(&self)-> f32
+                        self.x.powi(2) + self.y.powi(2).sqrt()
+                }
+                //Method borrowing self mutably
+                fn translate(&mut self , dx: f32, dy: f32){
+                        self.x += dx;
+                        self.y += dy;
+
+                }
+                // Method that takes ownership of the self
+                fn into_tuple()->(f32, f32){
+                        (self.x, self.y)
+
+                }
+                // Using self as the first parameter of a method means the method takes ownership of the instance and consumes it, transforming it into something else. This is useful when you want to prevent the caller from using the original instance after the transformation.
+
+                // Associated function
+                fnn from_tuple(coords: &(f32, f32))-> Point{
+                        Point{c: coords.0, y:coords.1}
+                }
+        }
+
+        fn main(){
+                let mut p = Point{x:3.0, y: 4.0};
+                let tuple = (10,20);
+                let q = Point::from_tuple(&tuple);
+                //println!("distance: {}", p.distance_from_origin());
+                //println!("modified Points: {:?}", p);
+                println!("Points from tuple: ({},{})", q.x,q.y);
+        }
+
+- Associated functions as constructor of a struct
+
+        struct Rectangle {
+                width: u32,
+                height: u32,
+        }
+        impl Rectangle {
+                fn new(w: u32, h: 32) -> Rectangle{   // it is a convention to use the word new for the constructor of the 
+                        Rectangle {width: w, height: h}
+
+                }
+
+                fn new_with_default()-> Rectangle {
+                        Rectangle::default()
+                }
+
+        }
+
+        fn main(){
+                let rect = Rectangle{
+                        width: 10,
+                        height: 20
+                };
+        }
