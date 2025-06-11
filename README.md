@@ -7,6 +7,7 @@ Buy the course at : https://www.udemy.com/course/master-the-rust-programming-lan
 - {:.}2 - 2 decimal places 
 - :#X - convert to Hexadecimal
 - :#b or :b 
+- :p to print a raw pointer 
 - r and r# can be used in place \ to escape special characters that may confuse the compiler , such as \ , "", etc
 ## useful rust tools
 #### rustfmt - for formating your code for best readability
@@ -1243,7 +1244,7 @@ You need to compare the ith tuple with the (i+1)th tuple and swap them if necess
         }
 
 - Associated functions as constructor of a struct
-
+        #[derive(debug, Default)]
         struct Rectangle {
                 width: u32,
                 height: u32,
@@ -1265,4 +1266,301 @@ You need to compare the ith tuple with the (i+1)th tuple and swap them if necess
                         width: 10,
                         height: 20
                 };
+        }
+
+##### Pattern Matching with structs 
+        #[derive(debug, Default)]
+        struct Rectangle {
+                width: u32,
+                height: u32,
+        }
+
+        fn main(){
+                let rect = Rectangle {
+                        width: 10,
+                        height: 20
+                };
+
+                match rect {
+                        Rectangle{ width : w , height : h} if w == h => {
+                                println!("The rectangle is square.");
+
+                        }, 
+                        Rectangle{ width : _ , height: _ } => {
+                                println!("The rectangle is not square.");
+                        }
+                }
+
+        }
+
+** Another Example **
+
+        #[allow(dead_code)]
+
+        struct Point {
+                x: i32,
+                y: i32,
+        }
+
+        struct Rectangle {
+                top_left: Point,
+                top_right: Point,
+        }
+
+        fn main(){
+                let rect = Rectangle {
+                        top_left: Point{ x: 0, y:10},
+                        bottom_right: Point{x:20, y:0},
+                };
+
+                match rect{
+                        Rectangle{ top_left: Point {x: 0, ..}, ..} =>{
+                                println!("The top-left corner of the rectangle is on the x- axis")
+                        },
+                        Rectangle{..} => println!("The rectangle is somewhere else."),
+
+                        }
+        }
+        
+
+** Ref keyword and @ **
+
+        #[derive(Debug)]
+        struct Person{
+                name: String,
+                age: i32,
+        }
+
+        fn main(){
+                let person  = Person{
+                        name: "Ram".to_string(),
+                        age: 35,
+                };
+
+                match person {
+                        Person { age : p_age @30 , name: _} => println!("A person with age {}.", p_age),
+                        Person  {ref name , age: 35} => {
+                                println!("Ram with age 35 found.");
+                        }
+                        _ => println!("Not sure who the person is. "),
+                }
+
+                println!("{:?}", person)
+        }
+
+# 19. Enums
+
+- An enum is typically used in any programming language to represent a value that cann be one of several possible variants
+- when you define an enum in Rust, you are essentially creating a new type that can have one of several possible variants. Each variant can be associated with its own set of data, which allows you to represent complex data structures usng single enum.
+- Enums have methods associated with them , just like structs 
+        struct Point {
+                x: i32,
+                y: i32,
+        }
+        enum CarStatus {
+                MovingUp (u32, i32, i32), // we can have something like this MovingUp{speed: u32, x: i32 , y: i32}
+                MovingDown,
+                NotMoving (Point),
+                NotWorking,
+        }
+
+        fn main(){
+
+                let current_car_status = CarStatus::NotMoving(Point{x: 0 , y: 0});
+
+                current_car_status = CarStatus::MovingUp(100, 67, 78);
+
+                //Pattern matching
+                //if car is movingUp, print its Speed 
+                // if car is NotMoving then print it x coordinate value 
+                match current_car_status{
+                        CarStatus::MovingUp(a, ..)=>{
+                                println!(" Car is moving up with speed : {}", a);
+                        }
+                        CarStatus::NotMoving(x, ..)=>{
+                                println!(" Car is not moving and x is  : {}", x);
+                        }
+                        _=> println!("Car is not moving"),
+                }
+        }
+
+##### Methods and associated functions of an Enum
+
+        struct Rectangle {
+                x: f32,
+                y: f32,
+                h: f32,
+                w: f32,
+        }
+
+        enum Shape {
+                Circle {x:32 , y:32, radius : f32},
+                Rectangle(Rectangle),
+                Square(f32, f32 , f32),
+        }
+
+        impl Shape {
+                fn new_circle(x: f32, y: f32, radius: f32)-> Shape {
+                        Shape::Circle{x, y, radius }
+                }
+
+                fn area (self: &Shape) -> f32{
+                        match self{
+                                Shape::Circle {radius: r, ..} =>{
+                                        std::f32::consts::PI * r * r
+                                }
+                                Shape::Rectangle(rec) =>{
+                                        rec.h * rec.w
+                                }
+                                Shape::Square(_,_,s) =>{
+                                        s*s
+                                }
+                        }
+
+                }
+        }
+
+        fn main(){
+
+                let new_shape = Shape::new_circle(0_f32, 2.0, 2.5);
+                let area = new_shape.area();
+                // print(area);
+
+        }
+
+##### Pattern matching usingg enums
+
+        enum lightState {
+             On { brightness: u8}  ,
+             Off,
+        }
+
+        fn main () {
+                let bulb = LightState:: On { brightness : 200};
+
+                if let LightState :: On { brightness: 200} = bulb {
+                        println!("Brightness is : {}", brightness);
+                }
+        }
+
+##### The Option<T> type USAGE
+###### Find the biggest string 
+
+        fn find_biggest_item(strings: &[&str]) -> Option<&str>{
+                let longest: Option<&str> = None;
+                for item in strings{
+                        if longest.is_none() || (item.len() > longest.unwrap().len()){
+                                longest = Some(item)
+                        } 
+                }
+                longest
+        }
+
+        fn main(){
+                let strings = ["Mango", "Banana", "Apple"];
+
+                let biggest_item = find_biggest_item(&strings);
+                println!("Biggest item: {}", biggest_item.unwrap());
+        }
+
+        // Using the match 
+
+        fn find_biggest_item(strings: &[&str]) -> Option<&str>{
+                let longest: Option<&str> = None;
+                for item in strings{
+                        if longest.is_none() || (item.len() > longest.unwrap().len()){
+                                longest = Some(item)
+                        } 
+                }
+                longest
+        }
+
+        fn main(){
+                let strings = ["Mango", "Banana", "Apple"];
+
+                let biggest_item = find_biggest_item(&strings);
+
+                match biggest_item{
+                        Some(value)=> {
+                               println!("Biggest item: {}", value); 
+                        },
+                        None => println!("Array is empty"),
+                }
+                
+        }
+
+# 20. Vectors
+
+- A growable list type that stores elements contiguously in memory
+- Vectors are growable and shrinkable at run time, which means you can modify their sizes at runtime by adding or removing elements. (Remember arrays in RUST ([T; N]) have a fixed size that's determined at compile time?)
+- Supports random access , push, pop and other list like operations 
+
+        fn main() {
+                // This creates an empty vector , its type will be determined as soon as you start pushing data into it
+                let mut v = Vec::new();   // if you want to explicitly mention the type : let mut v : Vec<i32> = Vec::new()
+
+                // Push elements into the vector
+                v.push(1);
+                v.push(2);
+                v.push(3);
+                v.push(4);
+                v.push(5);    // All this can also be implemented using a rust macro vec! let v = vec![1, 2, 3, 4, 5];
+
+                for i in v{
+                        println!("{}", i);
+                }
+        }
+
+- Converting array to Vector
+
+        let arr = [1, 2, 3 , 4, 5];
+
+        let vec1 = arr.to_vec();
+        let vec2 = Vec::from(arr);
+        let vec3 = Vec::from([1, 2, 3 , 4, 5])
+        let vec4 = Vec::from([10; 5]);
+
+        //use debug trait , coz you know the drill for these data types 
+        println!("{:?}", vec4)
+
+#### Vectors under the hood
+![alt text](image-3.png)
+
+![alt text](image-4.png)
+
+- **Vectors are move by default**
+
+        let v = vec![1, 2, 3];
+        println!("{}", v[0]);
+
+- indexing in Rust for vectors 
+
+        let v = vec!["Sun".to_string(), "Mon".to_string(), "Tue".to_string()];
+
+        let s = &v[0]; // since strings doesn't allow copying then borrowing like this will be the best method
+
+- **Safer Vector Indexing**
+
+The safest way to access elements in a Vec is using the get and get_mut methods. They return an Option<&T> or Option<&mut T> respectively instead of panicking when faced with out of bounds indices 
+
+        fn main(){
+                let mut vec = vec![1,2,3];
+
+                //Using get
+                // val_ref is of type Option<&i32>
+                let val_ref = vec.get(1);
+
+                if let Some(val) = val_ref {
+                        println!("Value : {}", val);
+                }
+                // Using get_mut
+                // val_mut_ref is of type Option <&mut i32>
+
+                let val_mut_ref = vec.get_mut(2);
+                if let Some(val) = val_mut_ref {
+                        // Dereferencing and modifying the value in place 
+
+                        *val += 10;  // 13 will be the new value at index 2 
+                }
+                println!("{:?}", vec);
         }
