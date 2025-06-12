@@ -1564,3 +1564,27 @@ The safest way to access elements in a Vec is using the get and get_mut methods.
                 }
                 println!("{:?}", vec);
         }
+
+###### Slice of a vector 
+
+        let vec = vec![1, 2,3 ,4 ,5];
+
+        let slice = &vec[1..4]; // A slice containing [2, 3, 4]
+
+###### push()
+- The push method is uded to append an element to the ned of the a Vec. It will increase the length by one
+
+##### pop()
+- When you call pop() on a Vec, it returns an Option<T> where T is the type of elements store in the vector.
+- If the vector is not empty, pop() removes the last element, returns Some(value), and decreases the vector's length by one. If the vector is empty, pop() returns None
+
+**Does the Vec shrink with every pop()?**
+ yes in terms of its length(len()), but not in terms of its capacity (capacity())
+
+ ##### shrink_to_fit();
+ - this frees the excess memory to fit the vector size
+
+# 20 Simple Weather Station Application
+- write a program to manage weather data for different cities
+-  UML 
+![alt text](image-5.png)
