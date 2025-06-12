@@ -1587,4 +1587,40 @@ The safest way to access elements in a Vec is using the get and get_mut methods.
 # 20 Simple Weather Station Application
 - write a program to manage weather data for different cities
 -  UML 
-![alt text](image-5.png)
+![alt text](image-6.png)
+
+# 21 Simple library Management App
+- Build a small command-line program that lets a user keep track of the books they own, lend out, and return. It exercises exactly the same core ideas you used in the weather app:
+
+- enum for a small set of states
+- struct compositions
+- Vec<T> to hold many items
+- methods (impl) for CRUD operations
+- a simple, text-menu loop with input parsing
+
+0 · Domain model (design first!)
+
+        Concept coded
+        BookStatus (enum)	 Available, Borrowed, Lost
+        Book (struct)	         title, author, year, status: BookStatus
+        Library (struct)	 books: Vec<Book>
+
+
+##### Self , self , &self , &mut self 
+
+
+        impl Something {
+        fn new(args…)           -> Self          // build a fresh value
+        fn read_only(&self)      { … }           // look, no touch
+        fn change_me(&mut self)  { … }           // look AND touch
+        }
+
+**Quick mental model**
+
+###### Type vs. value
+- Self → the blueprint (“Weather card design”)
+- self → one actual card in your hand
+###### Immutable vs. mutable borrow
+- &self → “peek at my card”
+- &mut self → “here’s my card and a pencil—feel free to edit”
+
