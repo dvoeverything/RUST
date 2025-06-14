@@ -1764,11 +1764,81 @@ The safest way to access elements in a Vec is using the get and get_mut methods.
 
         // Iterate over all entries and print them 
 
-        for (fruit, price) in &fruit_prices {
+        for (fruit, price) in &fruit_prices {   // & is referencing basically borrowing to avoid the transfer of ownership
                 println!("{}: ${}", fruit, price);
         }
         
         }
 
-        // alternatively you can use indexing syntax
+        // Indexing works but will panic if value ifs not found
         println!("Price of an apple: ${}", fruit_prices["apple"]);
+
+        // safe way to access values : using the get method 
+        match fruit_prices.get("orange"){
+                Some(price) => println!("Price of an orange: ${}", price),
+                None => println!("Orange price doesn't exist"),
+        }
+
+        // you can also use built in functions sunch keys() and values()
+
+###### Other very useful stuff
+**Netsed HashMap** 
+**entry()** - similar to get in python, let's say you want to check if a key exists , if yes then increment by 1 else by 0
+
+        fn main({
+                let mut fruits = HashMap::new();
+                *fruits.entry("apple").or_insert(0) +=1;
+        })
+**or_insert()** - takes zero as an argument
+- When you use or_insert(expensive_computatio()), the expensive-computation() function is executed before the or_insert is called , regardless of whether the key exists in the map or not. So everytime this line runs, expensive _computation() is called.
+
+**or_insert_with()** - takes a closure as an argument 
+- When you use or_insert_with(expensive_computatio()), the expensive-computation() function is executed only when the key does not already exist in the map. This is because or_insert_with() accepts a closure and only invokes it when needed
+
+**and_modify()**
+- The and_modify() method on the Entry enum is useful for modifying the value and associated with a key in a HashMap when the keyexists. It allowws manipulationfor in-place manipulation of the value needing to remove the key-value pair then reinserting it.
+- Use and_modify() in conjuction with methods like or_insert() to handle both cases, when key is present (modify it's value) and when it's not(insert a default value)
+
+        let mut fruits = HashMap::new();
+        fruits.entry("apple").and_modify(|value| *value+=1).or_insert(1);
+        
+
+# 23 Error handling
+- Result <T, E> is the type used for returnng and propagating errors. It is an enuk with the variants , Ok(T), representing success and containing a value, Err(E), representing error containing an error value.
+
+        enum Result<T, E>{
+                Ok(T),
+                Err(E),
+        }
+
+- Functions returns Result whenever errors are expected and recoverabl. In the std crate, Result is most prominently used for I/O
+
+- Rust offers several mechanisms for programmers to hadle errors in a safe and efficient manner.
+1. Result Enum
+2. Option Enum
+3. Panic Macro
+4. Unwrap() and expect() methods
+5. ? Operator
+
+**Result Enum**
+
+        fn add_strings(s1: &str, s2: &str) -> Result<String, String>{
+                if s1.is_empty() || s2.is_empty(){
+                        return Err("Empty string is detected".to_string());
+                }
+
+                let c = format!("{}{}", s1, s2);
+                Ok(c)
+        }
+
+        fn main(){
+                let c = add_strings("hello", "");
+
+                match c {
+                        Ok(v) => println!("Result = {}", v),
+                        Err(e) => println!("{}",e),
+                }
+        }
+
+
+
