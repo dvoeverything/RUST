@@ -1584,6 +1584,123 @@ The safest way to access elements in a Vec is using the get and get_mut methods.
  ##### shrink_to_fit();
  - this frees the excess memory to fit the vector size
 
+ ##### drain()
+ - The drain method on a Vec takes a single parameter which is a range. This range specifies the beginning and end of the swection of the vector to be drained
+        
+        fn main(){
+                let mut v = vec![1,2,3,4,5,6];
+                let _ = v.drain(1..3); this will drain values 2 and 3
+                println!("{:?}", v);
+        }
+
+###### extract_if()
+- this is a nightly build feature
+
+        #![feature(extract_if)] // because it is nightly build not a stable feature
+
+        fn filter_number(e: &mut i32) -> bool{
+                *e>5
+        }
+
+        fn main(){
+                let mut numbers = vec![1,2,3,4,5,6,8,9,11,13,14,15];
+
+                let c1: Vec<_> = numbers.extract_if(filter_number).collect(); // extract_if() takes a closure as an argument
+                println!("{:?}", numbers);
+                println!("{:?}", c1);
+        }
+
+###### retain() and retain_mut()
+- it allows you to keep only the elements that satisfy a given predicate while removing all others , its an inplace filter for a Vec
+
+        fn main(){
+                let mut numbers = vec![-3, -2, -1, 0, 1, 2, 3];
+                // this will retain only positive numbers that are greater than zero
+                numbers.retain(|x| *x > 0);
+
+                println!("{:?}", numbers); //prints : [1,2,3]
+        }
+
+        // retain can also take a closure
+        fn retain_positive(x: &mut i32) -> bool{
+                *x>0
+        }
+
+        fn main(){
+                let mut numbers = vec![-3, -2, -1, 0, 1,2 3];
+                numbers.retain(retain_positive);
+                println!("{:?}", numbers);
+               
+        }
+
+        //retain_mut()
+        fn retain_and_modify_positives(x: &mut i32) ->{
+                if *x>0{
+                        *x += 10;
+                        true
+                }else{
+                        false
+                }
+        }
+        fn main(){
+                let mut numbers = vec![-3, -2, -1, 0, 1,2 3];
+                numbers.retain(retain_and_modify_positive);
+                println!("{:?}", numbers);  // [11, 12, 13]
+               
+        }
+
+###### split() and friends
+- The split method creates an iterator over subslices seperated by elements matching a predicate. It's a way to tokenize or divide a slice based on a given condition.
+- The matched element is not contained in the subslices
+
+        fn main(){
+                let vec = vec![1,2,3,7, 11, 4, 33, 67, 8, 10];
+                let subslices = vec.split(|e| e%2 == 0).collect(); // whenever closure returns true for an element , that element is treated as a splitpoint, and the original slice at that point (exclusing the element itself)
+                for slice in subslices{
+                        println!("{:?}", slice);
+                }
+        }
+        // splitn()
+        fn main(){
+                let vec = vec![1,2,3,7, 11, 4, 33, 67, 8, 10];
+                let subslices = vec.splitn(2,|e| e%2 == 0).collect(); //splits the vec to n subsets 
+                for slice in subslices{
+                        println!("{:?}", slice);
+                }
+        }
+        //rsplit iterates from the end to the beginning (reverse)
+        //split_off() - if you want to devide a Vec into two parts at a certain index and intend to use both parts independently afterwards
+
+###### splice()
+- the splice method is used to replace a specified range of elements in a vector with elements from an iterator
+
+        fn main(){
+                let mut primary_readings = vec![22, 23, 24, 0, 0, 0, 35, 25, 26, 27];
+                // Backup readings for hours 4 to 6
+                let backup_reading = vec![21, 24, 27];
+
+                let faulty_readings: Vec<_> = faulty_readings.splice(3..6, backup_readings).collect;
+                println!("corrected readings: {:?}", primary_readings);
+                println!("faulty readings: {:?}", faulty_readings);
+        }
+###### append()
+- appends two vectors , the source loses ownership 
+
+###### extend()
+- takes aniterator and extends the vector with elements from that iterator, compared to the append(), 
+
+###### Prepend
+- you can prepend using the insert method, the time complexity of insert is O(n) where n refers to the number of elements to the right of the specified index where the ne element is being inserted
+
+        fn main(){
+                let mut vec = vec![1,2,3];
+                vec.insert(0, 25);
+                println!("{:?}", vec);  //[25, 1, 2, 3]
+        }
+###### VecDeque<T>
+- Double ended queue
+
+![alt text](image-7.png)
 # 20 Simple Weather Station Application
 - write a program to manage weather data for different cities
 -  UML 
@@ -1624,3 +1741,34 @@ The safest way to access elements in a Vec is using the get and get_mut methods.
 - &self → “peek at my card”
 - &mut self → “here’s my card and a pencil—feel free to edit”
 
+# 22 HashMap
+- basically key value pairs
+
+        use std::collections::HashMap;
+
+        fn main(){
+
+        // create a new HashMap
+        let mut fruit_prices = HashMap::new();
+
+        // Insert key-value pairs (fruit name as a key and price as value)
+        fruit_prices.insert("apple", 1.2); 
+        fruit_prices.insert("banana", 0.8); 
+        fruit_prices.insert("cherry", 2.5); 
+
+        // Access the price of a specific fruit 
+        let apple_price = fruit_prices.get("apple").unwrap_or(&0.0);
+
+        // Print the price 
+        println!("The price of an apple is ${}", apple_price);
+
+        // Iterate over all entries and print them 
+
+        for (fruit, price) in &fruit_prices {
+                println!("{}: ${}", fruit, price);
+        }
+        
+        }
+
+        // alternatively you can use indexing syntax
+        println!("Price of an apple: ${}", fruit_prices["apple"]);
