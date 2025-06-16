@@ -1840,5 +1840,142 @@ The safest way to access elements in a Vec is using the get and get_mut methods.
                 }
         }
 
+**ErrorPropagation Operator ?**
+- this is the debug trait
+
+        fn add_strings(s1: &str, s2: &str) -> Result<String, String>{
+                if s1.is_empty() || s2.is_empty(){
+                        return Err("Empty string is detected".to_string());
+                }
+
+                let c = format!("{}{}", s1, s2);
+                Ok(c)
+        }
+
+        fn main()-> Result<(), AddStringError>{
+                let c = add_strings("hello", "")?;
+                println!("{}",c);
+                Ok(())
+
+        }
+
+**Converting Option<T> to Result<T, E> type**
+
+- use ok_or() - check documentation
+
+        fn add_strings(s1: &str, s2: &str) -> Result<String, String>{
+                if s1.is_empty() || s2.is_empty(){
+                        None;
+                } else { 
+                        Some(format!("{}{}", s1, s2));}
+        }
+
+        fn main()-> Result<(), String>{
+
+                let s1 = String::new();
+                let s2 = String::from("World");
+                let res = add_strings(s1, s2).ok_or("Strings can not be empty")?;
+                println!("{}",res);
+                Ok(())
+
+        }
+**Unwrap() and expect()**
+- Both expect and unwrap are methods provided by the Option and Result enums for extracting their values.
+- unwrap() simply returns the contained value of the Someor or Ok, and if the value is None or an Err, it will panic and terminate the program
+
+        //unwrap
+        fn add_strings(s1: &str, s2: &str) -> Result<String, String>{
+                if s1.is_empty() || s2.is_empty(){
+                        None;
+                } else { 
+                        Some(format!("{}{}", s1, s2));}
+        }
+
+        fn main(){
+
+                let s1 = String::new();
+                let s2 = String::from("World");
+                let res = add_strings(s1, s2).unwrap();
+                println!("{}",res);
+
+        }
+        //expect 
+        fn get_user_input()->String{
+                io::stdout().flush().expect("flush failed");
+                let mut s = String::new();
+                std::io::stdin().read_line(&mut s).unwrap();
+                s.trim().to_string()
+
+        }
+
+**unwrap_err(), unwrap_or(fallback)**
+- Unwrap_err() is a counterpart of unwrap , it panics when the result is not an error
+- unwrap_or() is a method defined for Option and Result enums that returns the contained value of the Some or Ok variant or a default value provided as an argument if None or Err
+        
+        fn add_strings(s1: &str, s2: &str) -> Result<String, String>{
+                if s1.is_empty() || s2.is_empty(){
+                        return Err("Empty string is detected".to_string());
+                }
+
+                let c = format!("{}{}", s1, s2);
+                Ok(c)
+        }
+
+        fn main(){
+
+                let s1 = String::new("");
+                let s2 = String::from("World");
+                let res = add_strings(s1, s2).unwrap_err();
+                println!("{}",res);
+
+        }
+        //unwrap_or()
+        fn main(){
+
+                let s1 = String::new("");
+                let s2 = String::from("World");
+                let res = add_strings(s1, s2).unwrap_or("Some Went wrong".to_string());
+                println!("{}",res);
+
+        }
+
+**Standard Library Error types**
+
+![alt text](image-8.png) 
+
+**Handling I/O Errors**
+std::io::Error is an error type provided by the Rust standard library's io module. The std::io::Error type is used to represent errors that occur during I/O operations, such reading or writing to a file or network socket
+
+        use std::io;
+        use std::fs
+        fn rename_file(from: &str, to: &str)-> Result<(), io::Error>{
+        // explore fs in the documentation to learn more about file system manipulation
+               match fs::rename(from, to){
+                Ok(_)=> Ok(()),
+                Err(e)=> Err(e),
+               }
+
+        }
+        //alternatively the above function  using ? 
+        fn rename_file(from: &str, to: &str)->io::Result<()>{ //notice these changes here
+               fs::rename(from, to)?;
+               Ok(())
+
+        }
+
+        fn main(){
+                let res = rename_file("log.txt", "output.txt");
+
+                if res.is_err(){
+                        println!("Rename failed");
+                }else{
+                        println!("Rename Successful");
+                }
+        }
+
+        
+
+
+
 
 
