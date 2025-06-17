@@ -1973,7 +1973,108 @@ std::io::Error is an error type provided by the Rust standard library's io modul
                 }
         }
 
-        
+**map_err()**
+- instead of using match
+
+        fn convert_err(e: std::num::ParseIntError) -> io::Error{
+                io::Error::new(io::ErrorKind::InvalidData, format!("{}",e))
+        }
+        fn parse_integer_from_string(input: &str)-> io::Error{
+                i32::from_str(input).map_err()
+        }
+
+        fn main()-> io::Result<()>{
+                let mut user_input = String::new();
+
+                io::stdin().read_line(&mut user_input)?;
+
+                let result = parse_interger_from_string(&user_input);
+
+                match result {
+                        Ok(num) => println!("Parsed number: {}", num),
+                        Err(e) => println!("Error parsing number: {}", e)
+                }
+
+        }
+      
+        //alternatively you can use closures
+        fn parse_integer_from_string(input: &str) -> io::Result<i32>{
+                i32::from_str(input).map_err(|e| io::Error::new(io::ErrorKind::InvalidData, format!("{}", e)))
+        }
+
+# 24 Inventory Management System
+
+# 25 Generics
+- suing generics you can write functions or types that can work with any type that meets certain requirements rather than being tied to a specific type.
+- This makes yourcode more reusable and flexible since you can write code that can be used with various data types 
+
+        use std::cmp;
+        fn find_max_element<T: cmp::PartialOrd + Copy>(v:&[T])->Option<T>{
+                if v.is_empty(){
+                        return None;
+                }
+
+                let mut max = &v[0];
+
+                for &n in v {
+                        if n> max {
+                                max = n;
+                        }
+                }
+                Some(max)
+        }
+
+        fn main (){
+                let arr_int = [1, 2, 3, 4, 5];
+                let arr_float = [1.1 , 2.2, 3.3, 4.4, 5.5];
+                println!("Max int: {:?}", find_max_element(&arr_int));
+                println!("Max float: {:?}", find_max_element(&arr_float));
+        }
+
+###### Monomorphization 
+- Using generics in Rust does not cause any significant perfomance overhead. Rust's generics are implemented using monomorphization, meaningg the compiler generates seperate code for each concrete type used with a generic function or type.
+- This may increase the binary size of the compiled code, but it also results in faster execution because the code is specialized for the specific types being used.
+- Code can be optimized by the compiler as if it were written specifically for that type without any overhead.
+
+###### Generic functiomn with two type parameters of same type T
+        fn combine<T, U>(a: T, b: U)->(T, U){
+                (a,b)
+        }
+
+        fn main(){
+                let t1 = combine(3, "three");
+                let t2 = combine(2.0, "two");
+                println!("{:?} \n {:?}", t1, t2)
+        }
+
+###### Generics structs and Enums
+
+        #[derive(Debug)]
+        struct Pair<T, U>{
+                first: T,
+                second: U,
+        }
+
+        fn main(){
+                let pair_of_int = Pair{first:1 , second: "hello"};
+                let pair_of_strings = Pair{ first: hello, second: 4.5};
+
+                println!("{:?}", pair_of_ints);
+                println!("{:}",pair_of_strings);
+        }
+
+###### Methods of generic type struct
+
+        #[derive(Debug)]
+        struct Pair<T, U>{
+                first: T,
+                second: U,
+        }
+
+        impl <T, U> Pair<T, U>{
+                
+        }
+
 
 
 
