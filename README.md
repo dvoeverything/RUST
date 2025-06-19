@@ -2072,11 +2072,99 @@ std::io::Error is an error type provided by the Rust standard library's io modul
         }
 
         impl <T, U> Pair<T, U>{
-                
+
+        }
+# 26 Simple Generic stack data structure project
+- Implement a simple generic stack data structure
+
+**Requirements:**
+- Define a generic Stack struct that can store items of any type.
+
+**Implement the following methods for the Stack**
+
+- new: Creates a new, empty stack.
+- push: Adds an item to the top of the stack.
+- pop: Removes and returns the item from the top of the stack.
+- peek: Returns a reference to the top item without removing it.
+- is_empty: Checks if the stack is empty.
+- size: Returns the number of items in the stack.
+- clear: Removes all items from the stack.
+
+
+
+**Hints:**
+- Define a generic struct whose name is 'Stack' generic over T
+-  Use a 'Vector' to store the items
+
+# 27 Lifetimes
+**Lifetime Vs Scope**
+- Lifetimes in RUst are primarily associated with references rather than values 
+
+        fn main(){
+                let reference;
+                {
+                        let value = 10;
+                        reference = &value;    // Scope of 'value' , (This is also the lifetime)
+                }
         }
 
+- Scopes refer to a portion of the code where a variable is valid and accessible
+- Lifetimes, on the other hand , refers to the duration of which a reference is valid. They ensure that references do not outlive the data they point to , preventing dangling references
 
+**Lifetime**
+- Lifetime refers to the duration of which a reference is valid. They ensure that references do not outlive the data they point to, preventing dangling references 
+- Lifetimes in Rust are denoted using apostrophes(') followed by a lowercase character, typically 'a , 'b , 'c (common convention)
 
+        fn bar<'a>(x: &'a mut i32, y: &i32)->&'a i32 {
+                x
+        }
 
+![alt text](image-9.png)
 
+![alt text](image-10.png)
 
+![alt text](image-11.png)
+
+###### Lifetime annotations with structs
+
+        struct MySTruct<'a , 'b>{
+                data1 : &'a str,
+                data2: &'b str,
+        }
+
+        fn main(){
+                let data1 = "Hello";
+                let data2 = "World";
+
+                let my_struct = MyStruct{
+                        data1: &data1,
+                        data2: &data2,
+                };
+
+                println!("Data 1: {}", my_struct.data1);
+                println!("Data 2: {}", my_struct.data2);
+
+        }
+###### Lifetime annotations with struct methods
+
+        struct MyStruct<'a , 'b>{
+                data1: &'a str,
+                data2: &'b str,
+        }
+
+        impl <'a , 'b> MyStruct <'a, 'b>{
+                fn get_data1(&self)-> &'a str{
+                        self.data1
+                }
+                fn get_data2(&self)-> &'b str{
+                        self.data2
+                }
+        }
+
+        fn main(){
+                let struct_ins = MyStruct{
+                        data1: "Hi",
+                        data1: "World",
+                };
+                println!("{}", struct_ins.get_data1())
+        }
