@@ -2287,3 +2287,88 @@ std::io::Error is an error type provided by the Rust standard library's io modul
                 my_dog.set_age(10);
                 println!("age: {}", my_dog.get_age());
         }
+
+**Struct std::fmt::Formatter**
+- The Formatter struct provides methods which you can specify the formatting options , set the width , precision, alignment, and perfom other formatting operations.
+- it serves as a destination for writing formatted data:
+- The formatter object is typically provided by the formatting macros(eg, println!, write!, format!), when they are called , and you don't create it explicitly yourself. It encapsulates the output stream (String , File, Standard output, etc) and provides methods for writing formatted data.
+
+
+###### Trait bounds
+
+        impl <T> Rectangle<T>{
+                fn area(&self) -> T{
+                        self.width*self.height //this cannot work because the multiplication is only implemented for certain types
+                }
+        }
+
+        //To make it work you do this
+        impl<T: std::ops::Mul<Output =T>+ Copy> Rectangle<T>{
+                fn area(self)->T{
+                        self.width*self.height
+                }
+        }
+        // Alternatively
+        impl<T> rectangle<T>
+                where T: std::ops::Mul<Output = T>+ Copy + PartialOrd,
+                {
+                fn area(self)->T{
+                        self.width*self.height
+                }
+        }
+        struct Rectangle<T>{
+                width: T,
+                height: T,
+        }
+
+        fn main(){
+                let rect1 = Rectangle{width: 5.0, height: 10.0};
+                let rect2 = Rectangle{width: 7.5, height: 3.2};      
+                println!("Area of rect1: {}", rect1.area());
+                println!("Area of rect2: {}", rect2.area());
+        }
+
+###### Trait Objects and Virtual table
+- Trait objects, vtables and dynamic dispatch are closely related concepts used to enable polymorphism and runtime method resolution
+**dyn**
+
+        let vec_shapes: Vec<&dyn Shape> = vec![&circle, &rectangle]; // here the vector borrows the trait objects 
+
+![alt text](image-12.png)
+![alt text](image-13.png)
+
+###### Virtual table(vtable)
+- vtables (virtual tables ) are involved when using the trait objects
+- A vtable is a mechenism used by rust to support dynamic dispatch, which allows a program to call methods on trait objects at runtime without knowingthe concrete type of the object.
+- Rust compiler generates a vtables for each unique type that implements the trait
+
+###### Boxing the DST
+- Box is a heap-allocated smart pointer type that can be used to store dynamically sized types (DSTs) like trait objects(dyn Trait) and slices([T])
+
+        let shapes: Vec<&dyn Shape> = vec![Box::new(circle), Box::new(rectangle)]; // the vextor owns the trait object
+
+**Box<dyn Shape>**
+1. Box<T> is a smart pointer thatin Rust that allows you to alocate datat on the heap rather than the stack
+2. It is called a smart pointer because Box<T> can automatically handle the allocation and deallocation of heap memory
+3. Box adheres to Rust's ownership principles , ensuring that that there us a single owner for the heap allocated data at any given time.
+4. Basically, Box<T> encapsulates a raw pointer and makes it "smart" by adding several features and guarantees though its interface
+
+###### Memory representatition of the Box<T>
+![alt text](image-14.png)
+
+# 30 Closures
+- A closure is an anonymus function that can capture values from its environment.
+- Closures are a powerful tool for writing concise and reusable code in Rust. They can beused to:
+1. Pass functions as arguments to other functions
+2. Return functions from functions
+3. Iterate over collections 
+4. Write event handlers 
+5. create custom iterators
+6. store a function in a variable
+
+        fn main(){
+                let closure = |x: i32|-> i32{
+                        return x+1;
+                };
+                println!("{}", closure(10));
+        }
