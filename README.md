@@ -2529,3 +2529,108 @@ std::io::Error is an error type provided by the Rust standard library's io modul
 2. Customizable behavior 
 3. Deferred execution
 4. Iterator adapters
+
+###### Methods to store a closure in a struct
+1. As a trait object - Box<dyn Fn()>, Box<dyn FnMut()> or Box<dyn FnOnce()>
+
+        struct MyStruct{
+                val: i32,
+                action: Box<dyn Fn(i32) -> i32>, // trait object
+        }
+
+        fn main(){
+                let y = 10;
+                let closure = Box::new(move |x| x * y);
+
+                let s = MyStruct{val: 10, action: closure };
+                println!("{}", (s.action)(10));
+        }
+**dyn trait** - represents a trait object. But to use a trit object, it must be behind some pointer-like type, such as:
+- A reference : &dyn Trait or &mut dyn Trait 
+- A box: Box<dyn Trait>
+- other smart pointers or custom types that implement the Deref trait, like Rc<dyn Trait>, Arc<dyn Trait>, etc 
+![alt text](image-16.png)
+2. As a generic struct
+        struct TaxCalculator<F: Fn(f32) -> f32>{
+                calculation: F,
+        }
+        impl<F: Fn(f32)-f32> TaxCalculator{
+        fn new(calculation: T)-> TaxCalculator<T>{
+                TaxCalculator{calculation}
+        }
+
+        fn calculate(&self, amount: f32)->f32{
+                (self.calculation)(amount)
+        }
+        }
+        fn main() {
+        let vat_calculator = TaxCalculator::new(|amount| amount*0.2);
+        let income_tax_calculator = TaxCalculator::new(|amount| amount*0.3);
+        println!("{}", vat_calculator.calculate(10000f32));
+        println!("{}", income_tax_calculator.calculate(10000f32));
+        }
+
+
+##### Type of a closure
+- closures are different even if they look identical
+- to solve this use Box object as shown in the format below:
+
+        fn main(){
+                let y = 1;
+
+                let c1: Box<dyn Fn(i32)->i32> = Box::new(|x| x+y);
+                let c2: Box<dyn Fn(i32)-> i32> = Box::new(|x| x+y);
+
+                let vec_of_cosures: Vec<> = vec![c1, c2];
+                println!("{}", vec_of_closures[0](1));
+        }
+
+##### Closures and event handling
+        enum ButtonData{
+                Count(i32),
+                Message(String),
+        }
+        struct Button <F> where F: Fn(&mut ButtonData){
+                click_handler: F,
+                button_data: ButtonData
+        }
+
+        impl<F> Button<F> where F: Fn(&mut ButtonData){
+                fn new(click_handler: F, button_data: ButtonData)->Self {
+                        Button{
+                                click_handler,
+                                button_data,
+                        }
+                }
+
+                fn click(&mut self){
+                        (self.click_handler)(&mut self.button_data)
+                }
+
+                fn set_message(&mut self, message: String){
+                        self.button_data = ButtonData::Message(message)
+                }
+        }
+
+        fn main(){
+                let mut subscribe_btn = Button::new(|btn_data|
+                if let ButtonData::Count(sub_count)= btn_data{
+                       sub_count += 1;
+                       println!("Subscribed!! total subscription {}", sub_count); 
+                })ButtonData::Count(0);
+                subscribe_btn.click();
+                subscribe_btn.click();
+                subscribe_btn.click();
+                let send_btn = Button::new(|btn_data|
+                if let ButtonData::Message(msg)= btn_data{
+                        println!("Your message sent: {}", msg)
+                })ButtonData::Message(String::new());
+
+                send_btn.set_message("Hello from the other side".to_string());
+                subscribe_btn.click();
+
+
+        }
+# 31 Tax calculator
+
+
