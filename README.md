@@ -2212,3 +2212,78 @@ std::io::Error is an error type provided by the Rust standard library's io modul
                         println!("Updated mutable static: {}", MUTABLE_STATIC);
                 }
         }
+
+# 29 Traits
+- In Rust , Dog and Cat implement the Animal trait. 'Traits' serve the same purpose as interfaces in C++. They define a set of methods a type must implement, allowing for polymorphism and abstraction.
+
+        trait Animal{
+                fn make_sound(&self);
+                type Weight;
+                fn set_weight(&mut self, weight: self::Weight);
+                //Self is a Rust keyword that refers to the type of the struct or the enum that implements the trait. For example, if we have a Dog struct that implements Animal trait then Self in the trait methods will refer to the type Dog
+                fn get_weight(&self)->Self::Weight;
+                fn set_age(&mut self, age: u8){
+                        println!("This feature is not supported yet");
+                }
+
+                fn get_age(&self)->u8{
+                        println("This feature is not supported");
+                        0
+                }
+        }
+        // whichever types implement this trait must give definitions for this method or set of methods
+
+        #[derive(Default)]
+        struct Dog{
+                age: u8,
+                weight: f32
+        }
+
+        impl Animal for Dog{
+                fn make_sound(&self){
+                        println!("Woof-Woof!");
+                }
+                type Weight = f32; // The implementation of the trait provides the concrete type for the associated type
+
+                fn set_weight(&mut self, weight: f32){
+                        self.weight = weight;
+                }
+                fn get_weight(&self)->f32{
+                        self.weight
+                }
+                fn set_age(&mut self, age: u8){
+                        self.age = age;
+                }
+
+                fn get_age(&self)->u8{
+                        self.age
+                }
+        }
+        #[derive(Default)]
+        struct Cat{
+                age: u8,
+        }
+
+        impl Animal for Cat{
+                fn make_sound(&self){
+                        println!("Meow!");
+                }
+                type Weight = u8;
+
+                fn set_weight(&mut self, weight: u8){
+                        self.weight = weight;
+                }
+                fn get_weight(&self){
+                        self.weight
+                }
+        }
+
+        fn produce_sound<T>(animal&dyn Animal<Weight = T>){
+                animal.make_sound();
+        }
+        fn main(){
+                let mut my_dog = Dog::Default();
+                produce_sound(&my_dog);
+                my_dog.set_age(10);
+                println!("age: {}", my_dog.get_age());
+        }
