@@ -2159,6 +2159,11 @@ std::io::Error is an error type provided by the Rust standard library's io modul
                 fn get_data2(&self)-> &'b str{
                         self.data2
                 }
+
+                fn set_data(&mut self, s1: &'a str, s2: &'b str){
+                        self.data1 = s1;
+                        self.data2 = s2;
+                }
         }
 
         fn main(){
@@ -2167,4 +2172,43 @@ std::io::Error is an error type provided by the Rust standard library's io modul
                         data1: "World",
                 };
                 println!("{}", struct_ins.get_data1())
+        }
+
+# 28 Const and Static variables
+- constants in Rust are values that are fixed and immutable throughout the entire execution of a program
+- Constants must be explicitly typed
+- they are immutable
+- they are known at compile time
+- scoped globally
+- inlined
+-Lifetime are 
+
+        const MAX_VALUE: u32 = 100;
+        const MESSAGE: &str = "Hello, world";
+
+        fn main(){
+                let ref_to_const = &MAX_VALUE;
+                println!("The maximum is: {}", MAX_VALUE);
+                println!("Message: {}", MESSAGE);
+                println!("Value: {}", ref_to_const);
+        }
+
+**static items in Rust**
+- A static item is avalue that has a static lifetime , which means it is valid for the entire duration of the program's execution. Static items have a fixed memory address, and their values are accessible throughout the program
+
+        static GLOBAL_VALUE: i32 = 42;
+
+        fn main(){
+                println!("Global value: {}", GLOBAL_VALUE);
+        }
+
+        // modifying a statix variable
+        static mut MUTABLE_STATIC: i32 = 42;
+
+        fn main(){
+                unsafe{
+                        //modifying mutable static requires an unsafe block
+                        MUTABLE_STATIC = 10;
+                        println!("Updated mutable static: {}", MUTABLE_STATIC);
+                }
         }
