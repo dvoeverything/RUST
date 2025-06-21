@@ -1,6 +1,18 @@
 # RUST
 Buy the course at : https://www.udemy.com/course/master-the-rust-programming-language/?kw=rust+pro&src=sac&couponCode=ST21MT30625G1
 # 1. hello_world_001
+
+        use ferris_says::say; // from the previous step
+        use std::io::{stdout, BufWriter};
+
+        fn main() {
+        let stdout = stdout();
+        let message = String::from("Hello fellow Rustaceans!");
+        let width = message.chars().count();
+
+        let mut writer = BufWriter::new(stdout.lock());
+        say(&message, width, &mut writer).unwrap();
+        }
 # 2. print_002
 # 3. EMI_calculator
 #### important notes
@@ -2372,3 +2384,148 @@ std::io::Error is an error type provided by the Rust standard library's io modul
                 };
                 println!("{}", closure(10));
         }
+
+        // if it has one statment you can simplify the above with 
+        // also note that RUst infers the type
+        let closure = |x| x+1;
+
+###### Closure Capturing Environment
+- closures have the unique ability to capture aand use variables from their surrounding environment which allows them to reference and use variables that are defined outside their own scope. 
+- while regular functions are limited to accessing only the variables passed as arguments or defined within their own scope
+
+        fn main(){
+                let x = 10; //variable in the outernscope
+
+                //closure capturing 'x' from the outer environment
+
+                let add = |a| a + x;
+                let result1 = add(2); // closure uses 'x' from the outer scope: 2+10 = 12
+                println!("Result1: {}", result1);
+
+                let result2 = add(5); // Closure uses "x" from the outer scope : 5+ 10 = 15
+                println!("Result2 : {}", result2);
+
+        }
+
+        fn main(){
+                let mut x = 10;
+                let mut print = || { // note the mut , because we are borrowing x as mut 
+                        x+=1;
+                        println!("Modified x: {}", x);
+                };
+                print();
+                // The closure will return 11
+                print();
+                // When the closure is called again , it will return 12
+        }
+
+**Move**
+
+        fn main(){
+                let mut print;
+                {
+                let mut x = 10;
+                // defining a closure 'print' and capturing 'x' with the 'move' keyword.
+                print = move || { 
+                        // closure takes ownership of 'x' and mutates it
+                        x+=1;
+                        println!("Modified x: {}", x);
+
+
+                };
+                } // The scope ends here, 'x' goes out of scope and is dropped
+                print();
+                // The closure will return 11
+                print();
+                // When the closure is called again , it will return 12
+        }
+
+###### Traits associated with closures
+- Closures are often discussed in terms of the traits they implemement because closures do not have a specific type. 
+- Instead, they are represented by the traits they implement, such as Fn , FnMut, FnOnce, to express their behavior in code
+
+1. There are three traits related to closures: Fn , FnMut, FnOnce
+2. All closures implement the FnOnce trait, meaning they can all be called at least once
+3. The FnOnce allows a closure to consume the variables it captures from it's environment. After being called once, an FnOnce closure can not be called again as the environment has been consumed
+4. If a closure does not consume its environment , it can also implement the FnMut trait. This means the closure can be called multiple times and can mutate the environment
+5. If a closure does not mutate its environment, it can also implememt the Fn trait. This means that the closure can be called multiple times without mutating the environment.
+
+###### closure trait hierachy
+
+        Fn -> FnMut->FnOnce
+1. if a closure implements Fn , it also implements FnMut and FnOnce
+
+        fn main(){
+                let x = 5;
+                let closure = || x*2;
+
+                println!("{}", closure());
+                println!("{}",  closure());
+
+                call_fn(&closure);
+                call_fn_mut(&closure);
+        }
+
+        fn call_fn<F: Fn()->i32>(f:F){
+                println!("Fn called: {}", F());
+        }
+        fn call_fn_mut<F: FnMut()->i32>(mut f:F){
+                println!("Fn called: {}", F());
+        }
+
+###### Passing closure as arguments to a function
+**When passing closures to functions in Rust, you generally have two options:**
+1. Using function pointers:  closures that do not capture any variables from their environment can be corced to fn function pointer types. This means the closure does not hold any state and can be represented as a simple function pointer.
+
+        fn apply(f: fn(i32)-> i32 , arg:i32)-> i32{
+                f(arg)
+        }
+
+        fn main(){
+                let multiply: fn(i32)->i32 = |x| x * x;
+
+                let result = apply(multiply, 4);
+                println!("{}", result);
+
+        }
+2. Using generic functions trait bounds: This method is used when your closure does capture values from its scope. These closures implement one of the Fn , FnMut, or FnOnce traits , depending on how they use the values they capture
+        
+        fn apply<F>(f: F, arg:i32)-> i32
+        where F: Fn(i32)->i32
+        {
+                f(arg)
+        }
+
+        fn main(){
+                let y = 2;
+                let multiply = |x| x * y;
+
+                let result = apply(multiply, 4);
+                println!("{}", result);
+
+        }
+
+![alt text](image-15.png)
+
+###### Mutable FnMut
+        
+        fn apply<F>(mutf: F, arg:i32)-> i32
+        where F: FnMut(i32)->i32
+        {
+                f(arg)
+        }
+
+        fn main(){
+                let y = 2;
+                let multiply = |x| {y+=x; y};
+
+                let result = apply(multiply, 4);
+                println!("{}", result);
+
+        }
+###### Closures as struct member fields
+- Storing a closure in a struct can be useful in several scenarios:
+1. Event handling
+2. Customizable behavior 
+3. Deferred execution
+4. Iterator adapters
