@@ -18,27 +18,35 @@ impl Booking{
 #[derive(Debug)]
 struct BookingOnDate<'a>{
     date: &'a str,
-    all_bookings: &'a Vec<Booking>,
-    index: usize,
+    booking_iter: std::slice::iter<'a, Booking >,
 }
-
 impl <'a> BookingOnDate<'a>{
     fn new(date: &'a str, all_bookings: &'a Vec<Booking>)-> Self{
-        BookingOnDate{ date , all_bookings, index:0}
+        BookingOnDate{ date , all_bookings.iter()}
     }
 }
+struct BookingOnDateMut<'a>{
+    date: &'a str,
+    booking_iter: std::slice::iter_mut<'a, Booking >,
+}
 
+
+
+impl <'a> BookingOnDateMut<'a>{
+    fn new(date: &'a str, all_bookings: &'a mut Vec<Booking>)-> Self{
+        BookingOnDate{ date , all_bookings.iter_mut()}
+    }
+}
 impl <'a> Iterator for BookingOnDate <'a>{
     type Item =  &'a Booking;
     fn next(&mut self)-> Option<Self::Item>{
-        while self.index < self.all_bookings.len(){
-            let booking = &self.all_bookings[self.index];
-            self.index += 1;
-            if self.date ==booking.date{
-                return Some(booking)
-            }
-        }
-        None
+        self.booking_iter.find(|booking| self.date == booking.date) // type of booking is &&Booking
+    }
+}
+impl <'a> Iterator for BookingOnDateMut <'a>{
+    type Item =  &'a Booking;
+    fn next(&mut self)-> Option<Self::Item>{
+        self.booking_iter.find(|booking| self.date == booking.date) // type of booking is &&Booking
     }
 }
 fn main() {
@@ -57,6 +65,10 @@ fn main() {
             println!("{:?}", booking);
     }
 
-
+    let bookings2 = BookingOnDateMut::new("2023-10-30", &mut all_bookings);
+    for booking in bookings2{
+            println!("{:?}", booking);
+            booking.room_number = 100;
+    }
 
 }

@@ -2656,6 +2656,9 @@ std::io::Error is an error type provided by the Rust standard library's io modul
         }
 
 ###### Trait 'iterator ' vs Trait 'Intoiterator'
+- The iterator trait provides the next method, which is used to retrieve the next item from an iterator. 
+- The IntoIterator trait provides the into_iter method, which converts a type into an iterator(ItoIterator is used for types that can be transformed into iterators)
+- the Rust standard library has implemented IntoIterator for many common types , such Vec, HashMap, HashSet, BTreeMap, BTreeSet, arrays, and others, allowing them to be converted into iterators
 - iter() method creates an iterator that yields immutable references to the elements of a collection like an array or a vector. when you use iter(),  you can read the elements  but not modify them. The type of the elements yielded by the iterator is &T
 - iter_mut() method creates an iterator that yields mutable references to the elements of a collection like an array or a vector. when you use iter_mut(),  you can read the elements  and also modify them. The type of the elements yielded by the iterator is &mut T
 - into_iter() method creates an iterator that comsumes that collection  and yoelds its elements by value. After calling into_iter(),  you cannot use the original collection because its ownership has been transfered to the iterator. The type of the elements yielded by the iterator is T
@@ -2687,3 +2690,6 @@ std::io::Error is an error type provided by the Rust standard library's io modul
 # 33 Hotel booking project 
 - Write a program to manage hotel bookings. Implement a Booking struct that captures details like date , guest_name , and room_number. Additionally , create a custom iterator, BookingOnDate, that allows users to iterate over bookings for a specific date. The iterator should yield only those bookings that match the given date.
 
+# 34 Task Priority project 
+- Create a rust program for managing a to-do list where each task is assigned a priority level (High, Medium , or Low). Create a Priority enum , a Task struct , and a custom iterator PriorityIterator. Your challenge is to use the PriorityIterator to iterate over a list of tasks in the order of their priority, starting from High and ending with Low.
+- add a variety of tasks to your list, each with different priority levels. The iterator should sequentially return tasks based on their priority, demonstrating the custom sorting logic encapsulated in your iterator. Your program's output should clearly display the tasks in the order they are returned by the iterator, showcasing prioritisation of tasks
