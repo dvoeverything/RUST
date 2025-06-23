@@ -2633,4 +2633,57 @@ std::io::Error is an error type provided by the Rust standard library's io modul
         }
 # 31 Tax calculator
 
+# 32 Iterators
+
+- to iterate over  String that does not implement the Copy trait
+
+        fn main(){
+                let array = ["one".to_string(), "two".to_string()];
+
+                for e in array.iter(){ // alternatively you can say for e in &array{}
+                        println!({}, e), 
+                }
+        }
+
+###### mutable references
+
+        fn main(){
+                let mut array = [1,2,3,4];
+
+                for e in &mut array{
+                        *e += 1;
+                }
+        }
+
+###### Trait 'iterator ' vs Trait 'Intoiterator'
+- iter() method creates an iterator that yields immutable references to the elements of a collection like an array or a vector. when you use iter(),  you can read the elements  but not modify them. The type of the elements yielded by the iterator is &T
+- iter_mut() method creates an iterator that yields mutable references to the elements of a collection like an array or a vector. when you use iter_mut(),  you can read the elements  and also modify them. The type of the elements yielded by the iterator is &mut T
+- into_iter() method creates an iterator that comsumes that collection  and yoelds its elements by value. After calling into_iter(),  you cannot use the original collection because its ownership has been transfered to the iterator. The type of the elements yielded by the iterator is T
+        fn main(){
+                let numbers1 = ["One".to_string(), "Two".to_string(), "Three".to_string()];
+                let mut numbers2 = ["One".to_string(), "Two".to_string(), "Three".to_string()];
+                let numbers3 = ["One".to_string(), "Two".to_string(), "Three".to_string()];
+
+
+                let iterate by immutable_borrow = numbers.iter();
+                let iterate_by_mutable_borrow =numbers2.iter_mut();
+                let iterate_by_value = numbers.into_iter();
+
+                // type of i is &String
+                for i in iterate_by_immutable_borrow{
+                        println!("{}", i);
+                }
+
+                for i in iterate_by_mutable_borrow{
+                        *i = "abc".to_string();
+                }
+
+                for i in iterate_by_value{
+                        println!("{}", i);
+                }
+
+        }
+
+# 33 Hotel booking project 
+- Write a program to manage hotel bookings. Implement a Booking struct that captures details like date , guest_name , and room_number. Additionally , create a custom iterator, BookingOnDate, that allows users to iterate over bookings for a specific date. The iterator should yield only those bookings that match the given date.
 
