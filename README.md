@@ -2693,3 +2693,9 @@ std::io::Error is an error type provided by the Rust standard library's io modul
 # 34 Task Priority project 
 - Create a rust program for managing a to-do list where each task is assigned a priority level (High, Medium , or Low). Create a Priority enum , a Task struct , and a custom iterator PriorityIterator. Your challenge is to use the PriorityIterator to iterate over a list of tasks in the order of their priority, starting from High and ending with Low.
 - add a variety of tasks to your list, each with different priority levels. The iterator should sequentially return tasks based on their priority, demonstrating the custom sorting logic encapsulated in your iterator. Your program's output should clearly display the tasks in the order they are returned by the iterator, showcasing prioritisation of tasks
+
+##### How to implement an Intoiterator trait for the custom type
+- To use the IntoIterator trait effectively with your custom type, you need an iterator. If an iterator for your type isn't available you first need to implement the iterator trait. This involves creating a custom iterator with a next method that defines how to yield elements of your type sequentially.
+- once you have an iterator , you can then implement the IntoInterator trait for your type. In this implemetation, you specify how to covert your type into the custom iterator you've created . This enables your custom type to be seamlessly used in for loops and with other iterator-based functionalities in Rust.
+
+# 35 
