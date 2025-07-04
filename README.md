@@ -2698,4 +2698,12 @@ std::io::Error is an error type provided by the Rust standard library's io modul
 - To use the IntoIterator trait effectively with your custom type, you need an iterator. If an iterator for your type isn't available you first need to implement the iterator trait. This involves creating a custom iterator with a next method that defines how to yield elements of your type sequentially.
 - once you have an iterator , you can then implement the IntoInterator trait for your type. In this implemetation, you specify how to covert your type into the custom iterator you've created . This enables your custom type to be seamlessly used in for loops and with other iterator-based functionalities in Rust.
 
-# 35 
+# 35 Car Collection IntoIterator project
+- Write a program featuring a custom data type named CarCollection. 
+This collection will store a list of Car objects, each with attributes like make, model, and price. 
+The key requirement is to implement the IntoIterator trait for CarCollection 
+in all three forms (by value, by immutable reference, and by mutable reference). 
+However, there's a unique twist: the next method of the iterator should iterate over 
+cars within a specified price range. This means when the CarCollection is iterated over, 
+it should only yield cars whose prices fall within a given range 
+(e.g., cars priced between 20,000 and 50,000 USD). 

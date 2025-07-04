@@ -1,0 +1,13 @@
+[package]
+name = "nyt_top_stories"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name<you@example.com>"]
+description = "A project to fetch news top stories"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+reqwest = {version = "0.11.23", features = ["json"]}
+tokio = {version = "1.35", features = ["full"]}
+serde_json = "1.0.111"
