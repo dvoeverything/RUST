@@ -10,7 +10,7 @@ use reqwest;
 #[tokio::main]
 async fn main() -> Result<(), reqwest::Error> {
     // Replace with your New York Times API key
-    let api_key = "0Z09yO0JGoLHAd0HLQ3WsCJROerNRTWn";
+    let api_key = "your_api_key";
     let url = format!("https://api.nytimes.com/svc/topstories/v2/science.json?api-key={}", api_key);
 
     let response = reqwest::get(&url).await?.json::<Value>().await?;
